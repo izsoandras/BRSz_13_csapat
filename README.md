@@ -26,7 +26,7 @@
 - a program a pontszám mellett a játékos nevét is elmenti
 - a nehezebb pályán a pontszámokon szorzó van
 
-### Többjátékos mód
+#### Többjátékos mód
 - a két játék függetlenül fut
 - egymás mellett látszódik a saját és ellenfelünk táblája
 - ha az egyik játékos meghal a másik még tovább játszhat amég ő is meghal
