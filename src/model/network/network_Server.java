@@ -68,10 +68,15 @@ public class network_Server extends network_core {
                     Obj_outputstream.writeObject(Local_labyrinth);
 
                     Opponent_labyrinth.Labyrinth_data = (Labyrinth) Obj_inputstream.readObject();
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
+            }
+            if(Opponent_labyrinth.Status.Exited || Local_labyrinth.Status.Exited){
+                Running = false;
             }
         }
 

@@ -69,6 +69,9 @@ public class network_Client extends network_core {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            if(Opponent_labyrinth.Status.Exited || Local_labyrinth.Status.Exited){
+                Running = false;
+            }
         }
 
         Running = false;

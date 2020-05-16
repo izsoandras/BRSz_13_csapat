@@ -28,8 +28,9 @@ public abstract class network_core implements Runnable{
 
 
     //Public functions
-    public void UpdateLocallabyrinth(Labyrinth newlabyrinth) {
+    public void UpdateLocallabyrinth(Labyrinth newlabyrinth, Game_status newstatus) {
         Local_labyrinth.Labyrinth_data = newlabyrinth;
+        Local_labyrinth.Status = newstatus;
         Locallabyrinth_updated = true;
     }
 
@@ -37,8 +38,17 @@ public abstract class network_core implements Runnable{
         return Opponent_labyrinth.Labyrinth_data;
     }
 
+    public Game_status Get_Opponent_Status(){
+        return Opponent_labyrinth.Status;
+    }
+
     public Boolean isRunning(){
         return Running;
     }
+
+    public Boolean isConnected(){
+        return Connected;
+    }
+
 
 }
