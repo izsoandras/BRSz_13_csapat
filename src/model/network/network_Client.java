@@ -23,7 +23,7 @@ public class network_Client extends network_core {
 
     //Public functions
 
-    public network_Client(String IP_addr) throws IOException {
+    public network_Client(String IP_addr)  {
         super();
         IP_address = IP_addr;
 
@@ -34,26 +34,30 @@ public class network_Client extends network_core {
 
     public void run(){
         Running = true;
-
+        String str="test";
         try {
             GameSocket = new Socket(IP_address, 22222);
             //STREAMS
-            //Inputs
-            inputstream = new InputStreamReader(GameSocket.getInputStream());
-            Obj_inputstream = new ObjectInputStream(GameSocket.getInputStream());
-            Reader = new BufferedReader(inputstream);
             //Outputs
             Obj_outputstream = new ObjectOutputStream(GameSocket.getOutputStream());
             Writer = new PrintWriter(GameSocket.getOutputStream());
 
+            //Inputs
+            inputstream = new InputStreamReader(GameSocket.getInputStream());
+            Obj_inputstream = new ObjectInputStream(GameSocket.getInputStream());
+            Reader = new BufferedReader(inputstream);
 
-            String str = Reader.readLine();
+            str = Reader.readLine();
+            Writer.println("Henlo\n");
+            Writer.flush();
             if(!str.equals( "Henlo") ) {
-                System.out.println("Server not valid");
+                System.out.println("Server not valid\n");
                 Running = false;
                 return;
+            }else{
+                System.out.println("Server validated successfully\n");
             }
-            Writer.println("Henlo\n");
+
             Connected = true;
         } catch (IOException e) {
             Running = false;
