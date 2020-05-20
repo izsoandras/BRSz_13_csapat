@@ -36,39 +36,47 @@ public class network_Server extends network_core {
     public void run(){
         Running = true;
         System.out.printf("Server started\n");
-        try {
-            GameSocket = Server_socket.accept();
-        } catch (IOException e) {
-            Running = false;
-            Connected = false;
-            e.printStackTrace();
-            return;
+        while(!Connected) {
+                try {
+                    GameSocket = Server_socket.accept();
+                } catch (IOException e) {
+                    Running = false;
+                    Connected = false;
+                    e.printStackTrace();
+                    return;
+                }
+                System.out.printf("Server recieved client connection\n");
+                try {
+                    //STREAMS
+                    //Outputs
+                    Obj_outputstream = new ObjectOutputStream(GameSocket.getOutputStream());
+                    Obj_outputstream.flush();
+                    Writer = new PrintWriter(GameSocket.getOutputStream());
+
+                    //Inputs
+                    inputstream = new InputStreamReader(GameSocket.getInputStream());
+                    Obj_inputstream = new ObjectInputStream(GameSocket.getInputStream());
+                    Reader = new BufferedReader(inputstream);
+
+                    System.out.println("Verifying Client...\n");
+                    Writer.println("Henlo\n");
+                    Writer.flush();
+                    String str = Reader.readLine();
+                    if (str.equals("Henlo")) {
+                        System.out.println("Client verified!\n");
+                        Connected = true;
+                    }else{
+                        System.out.println("Client verifcation failed! Listening to other incoming connections...\n");
+                        GameSocket.close();
+
+                    }
+                } catch (IOException e) {
+                    Running = false;
+                    Connected = false;
+                    e.printStackTrace();
+                    return;
+                }
         }
-        System.out.printf("Server recieved client connection\n");
-        try {
-            //STREAMS
-            //Inputs
-            inputstream = new InputStreamReader(GameSocket.getInputStream());
-            Obj_inputstream = new ObjectInputStream(GameSocket.getInputStream());
-            Reader = new BufferedReader(inputstream);
-            //Outputs
-            Obj_outputstream = new ObjectOutputStream(GameSocket.getOutputStream());
-            Writer = new PrintWriter(GameSocket.getOutputStream());
-
-
-            Writer.println("Henlo\n");
-            String str = Reader.readLine();
-            if(str.equals( "Henlo") ) {
-                System.out.println("Client connected");
-            }
-            Connected = true;
-        } catch (IOException e) {
-            Running = false;
-            Connected = false;
-            e.printStackTrace();
-            return;
-        }
-
         //TO-DO GAMESETTINGS SENDING
 
 

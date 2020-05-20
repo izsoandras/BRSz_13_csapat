@@ -33,7 +33,8 @@ public abstract class network_core implements Runnable{
         Running = false;
         Connected = false;
         Locallabyrinth_updated = false;
-
+        Local_labyrinth = new network_labyrinth();
+        Opponent_labyrinth = new network_labyrinth();
         //System.out.printf("Parent constructor run\n");
     }
 
