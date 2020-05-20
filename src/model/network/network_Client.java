@@ -23,8 +23,10 @@ public class network_Client extends network_core {
 
     //Public functions
 
-    public network_Client(String IP_addr) {
+    public network_Client(String IP_addr) throws IOException {
+        super();
         IP_address = IP_addr;
+
     }
 //    public void network_Client(String IP_addr, int portnum){
 //        GameSocket = new Socket(IP_addr, portnum);

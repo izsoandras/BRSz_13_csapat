@@ -24,7 +24,9 @@ public class network_Server extends network_core {
     //Public functions
 
     public network_Server() throws IOException {
+        super();
         Server_socket = new ServerSocket( 22222 );
+        //System.out.printf("Child constr run\n");
     }
 
 //    public void network_Server(int portnumber) throws IOException {
@@ -33,9 +35,17 @@ public class network_Server extends network_core {
 
     public void run(){
         Running = true;
-
+        System.out.printf("Server started\n");
         try {
             GameSocket = Server_socket.accept();
+        } catch (IOException e) {
+            Running = false;
+            Connected = false;
+            e.printStackTrace();
+            return;
+        }
+        System.out.printf("Server recieved client connection\n");
+        try {
             //STREAMS
             //Inputs
             inputstream = new InputStreamReader(GameSocket.getInputStream());

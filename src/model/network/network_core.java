@@ -13,7 +13,8 @@ public abstract class network_core implements Runnable{
     protected Socket GameSocket;
     protected network_labyrinth Local_labyrinth;
     protected network_labyrinth Opponent_labyrinth;
-    protected Boolean Running, Connected, Locallabyrinth_updated;
+    protected Boolean Running;
+    protected Boolean Connected, Locallabyrinth_updated;
     protected InputStreamReader inputstream;
     protected ObjectInputStream Obj_inputstream;
     protected OutputStream outputstream;
@@ -28,6 +29,14 @@ public abstract class network_core implements Runnable{
 
 
     //Public functions
+    public network_core(){
+        Running = false;
+        Connected = false;
+        Locallabyrinth_updated = false;
+
+        //System.out.printf("Parent constructor run\n");
+    }
+
     public void UpdateLocallabyrinth(Labyrinth newlabyrinth, Game_status newstatus) {
         Local_labyrinth.Labyrinth_data = newlabyrinth;
         Local_labyrinth.Status = newstatus;
