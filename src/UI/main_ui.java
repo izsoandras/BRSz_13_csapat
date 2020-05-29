@@ -59,6 +59,7 @@ public class main_ui extends Application {
         Button btnBack = new Button("Back");
         btnBack.setOnAction(e->{mainWindow.setScene(Menu);});
 
+
         VBox root = new VBox();
         root.getChildren().addAll(lb, Score, btnBack);
         Game = new Scene(root, 600,600);
