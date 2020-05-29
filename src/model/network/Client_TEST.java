@@ -7,12 +7,9 @@ public class Client_TEST {
     public static void main(String[] args) {
 
         network_Client Test_Client;
-        try {
-            Test_Client = new network_Client("192.168.0.27");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
+
+        Test_Client = new network_Client("192.168.0.27");
+
 
         Thread thread = new Thread(Test_Client);
         thread.start();
