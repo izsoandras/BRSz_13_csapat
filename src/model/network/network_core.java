@@ -9,12 +9,12 @@ import model.map.Labyrinth;
 public abstract class network_core implements Runnable{
     //Private variables
 
-    //protected Timer Networktimer;
+    protected Updatesignal Sync_signal;
     protected Socket GameSocket;
     protected network_labyrinth Local_labyrinth;
     protected network_labyrinth Opponent_labyrinth;
     protected Boolean Running;
-    protected Boolean Connected, Locallabyrinth_updated;
+    protected volatile Boolean Connected, Locallabyrinth_updated;
     protected InputStreamReader inputstream;
     protected ObjectInputStream Obj_inputstream;
     protected OutputStream outputstream;
@@ -35,13 +35,15 @@ public abstract class network_core implements Runnable{
         Locallabyrinth_updated = false;
         Local_labyrinth = new network_labyrinth();
         Opponent_labyrinth = new network_labyrinth();
+        Sync_signal = new Updatesignal();
         //System.out.printf("Parent constructor run\n");
     }
 
-    public void UpdateLocallabyrinth(Labyrinth newlabyrinth, Game_status newstatus) {
+    public synchronized void UpdateLocallabyrinth(Labyrinth newlabyrinth, Game_status newstatus) {
         Local_labyrinth.Labyrinth_data = newlabyrinth;
         Local_labyrinth.Status = newstatus;
         Locallabyrinth_updated = true;
+        Sync_signal.doNotify();
     }
 
     public Labyrinth Get_Opponent_labyrinth(){

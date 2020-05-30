@@ -79,20 +79,32 @@ public class network_Server extends network_core {
         }
         //TO-DO GAMESETTINGS SENDING
 
+        while(!Locallabyrinth_updated){
+            Sync_signal.doWait();
+        }
+
+        try {
+            //sending local labyrinth with game data to client
+            Obj_outputstream.writeObject(Local_labyrinth);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
 
         while( Running ){
-            if(Locallabyrinth_updated) {
-                try {
-                    Obj_outputstream.writeObject(Local_labyrinth);
-
-                    Opponent_labyrinth.Labyrinth_data = (Labyrinth) Obj_inputstream.readObject();
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+            //Wait for local labyrinth to get updated
+            while(!Locallabyrinth_updated){
+                Sync_signal.doWait();
             }
+            //send local lab and receive client lab
+            try {
+                Obj_outputstream.writeObject(Local_labyrinth);
+                Opponent_labyrinth.Labyrinth_data = (Labyrinth) Obj_inputstream.readObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //if either guy exits game is over
             if(Opponent_labyrinth.Status.Exited || Local_labyrinth.Status.Exited){
                 Running = false;
             }

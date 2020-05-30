@@ -15,11 +15,7 @@ public class network_Client extends network_core {
 
     //Public variables
 
-
-
     //Private functions
-
-
 
     //Public functions
 
@@ -64,7 +60,19 @@ public class network_Client extends network_core {
             Connected = false;
             e.printStackTrace();
         }
-        //TO-DO GAMESETTINGS RECIEVING
+        //Receive server labyrinth to get maze data
+        try {
+            while(!Reader.ready()){
+                Thread.sleep(100);
+            }
+            if(Reader.ready()) {
+                Opponent_labyrinth.Labyrinth_data = (Labyrinth) Obj_inputstream.readObject();
+            }
+        } catch (Exception e) {
+            Running = false;
+            Connected = false;
+            e.printStackTrace();
+        }
 
         while( Running ){
             try {
@@ -73,6 +81,8 @@ public class network_Client extends network_core {
                     Obj_outputstream.writeObject(Local_labyrinth);
                 }
             } catch (Exception e) {
+                Running = false;
+                Connected = false;
                 e.printStackTrace();
             }
             if(Opponent_labyrinth.Status.Exited || Local_labyrinth.Status.Exited){

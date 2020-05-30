@@ -1,10 +1,10 @@
 package model.network;
 
 public class Game_status {
-    public boolean Ready;
-    public boolean Finished;
-    public boolean  Paused;
-    public boolean Exited;
+    public volatile boolean Ready;
+    public volatile boolean Finished;
+    public volatile boolean  Paused;
+    public volatile boolean Exited;
 
     public Game_status(){
         Ready = false;
