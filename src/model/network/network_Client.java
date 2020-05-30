@@ -27,10 +27,15 @@ public class network_Client extends network_core {
 //    public void network_Client(String IP_addr, int portnum){
 //        GameSocket = new Socket(IP_addr, portnum);
 //    }
-
+    public synchronized void UpdateLocallabyrinth(Labyrinth newlabyrinth, Game_status newstatus) {
+        Local_labyrinth.Labyrinth_data = newlabyrinth;
+        Local_labyrinth.Status = newstatus;
+        //Locallabyrinth_updated = true;
+        //Sync_signal.doNotify();
+    }
     public void run(){
         Running = true;
-        String str="test";
+        String str;
         try {
             GameSocket = new Socket(IP_address, 22222);
             //STREAMS

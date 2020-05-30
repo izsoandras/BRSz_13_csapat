@@ -39,12 +39,7 @@ public abstract class network_core implements Runnable{
         //System.out.printf("Parent constructor run\n");
     }
 
-    public synchronized void UpdateLocallabyrinth(Labyrinth newlabyrinth, Game_status newstatus) {
-        Local_labyrinth.Labyrinth_data = newlabyrinth;
-        Local_labyrinth.Status = newstatus;
-        Locallabyrinth_updated = true;
-        Sync_signal.doNotify();
-    }
+    public abstract void UpdateLocallabyrinth(Labyrinth newlabyrinth, Game_status newstatus);
 
     public Labyrinth Get_Opponent_labyrinth(){
         return Opponent_labyrinth.Labyrinth_data;

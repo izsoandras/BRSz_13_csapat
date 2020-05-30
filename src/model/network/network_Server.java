@@ -33,6 +33,13 @@ public class network_Server extends network_core {
 //        Server_socket = new ServerSocket(portnumber);
 //    }
 
+    public synchronized void UpdateLocallabyrinth(Labyrinth newlabyrinth, Game_status newstatus) {
+        Local_labyrinth.Labyrinth_data = newlabyrinth;
+        Local_labyrinth.Status = newstatus;
+        Locallabyrinth_updated = true;
+        Sync_signal.doNotify();
+    }
+
     public void run(){
         Running = true;
         System.out.printf("Server started\n");
