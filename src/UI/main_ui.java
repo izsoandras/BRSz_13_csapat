@@ -1,10 +1,15 @@
 package UI;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import static model.GameParams.LABYRINTH_HEIGHT;
@@ -63,6 +68,29 @@ public class main_ui extends Application {
         VBox root = new VBox();
         root.getChildren().addAll(lb, Score, btnBack);
         Game = new Scene(root, 600,600);
+        Canvas c = new Canvas(LABYRINTH_WIDTH*block_size, LABYRINTH_HEIGHT*block_size);
+        GraphicsContext gc = c.getGraphicsContext2D();
+        root.getChildren().add(c);
+
+        new AnimationTimer() {
+            long lastTick = 0;
+
+            public void handle(long now) {
+                if (lastTick == 0) {
+                    lastTick = now;
+                    tick(gc);
+                    return;
+                }
+
+                if (now - lastTick > 1000000000 / 5) {  //speed=5
+                    lastTick = now;
+                    tick(gc);
+                }
+            }
+
+        }.start();
+
+
     }
     private void constructSettings(){
         Label lb = new Label("Beállítások");
@@ -85,4 +113,12 @@ public class main_ui extends Application {
         Toplist = new Scene(root, 600,600);
     }
 
+
+    public static void tick(GraphicsContext gc) {
+    //játék logikája
+        gc.setFill(Color.RED);
+        gc.setFont(new Font("", 50));
+        gc.fillText("GAME OVER", 100, 250);
+        return;
+    }
 }
