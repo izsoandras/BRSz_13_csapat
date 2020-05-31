@@ -70,6 +70,8 @@ public class Labyrinth implements Steppable {
         danger = null;
     }
 
+    /** Creates a Labyrinth from it's saved state
+     * */
     public Labyrinth(LabyrinthMemento memento){
         timeSinceLastExtra = memento.getTimeSinceLastExtra();
 
@@ -199,6 +201,8 @@ public class Labyrinth implements Steppable {
         return  emptyFields;
     }
 
+    /** Creates the map without any walls
+     * */
     private void createWallessLabyrinth(){
         final int SNAKE_BODY_LENGTH = 5;
         final int SNAKE_START_X = 30;
@@ -246,9 +250,14 @@ public class Labyrinth implements Steppable {
         return  fields;
     }
 
+    /** Returns a saved state of the labyrinth, from which it can be restored
+     * */
     public LabyrinthMemento makeMemento(){
         return new LabyrinthMemento(this);
     }
+
+    /** Getter functions
+     * */
 
     public Food getFood() {
         return food;
