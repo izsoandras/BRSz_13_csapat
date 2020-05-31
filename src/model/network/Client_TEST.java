@@ -1,14 +1,14 @@
 package model.network;
 
 import model.map.Labyrinth;
-import model.util.LabyrinthFactory;
+import model.util.LabyrinthType;
 
 import java.io.IOException;
 
 
 public class Client_TEST {
     public static void main(String[] args) {
-        Labyrinth client_lab = LabyrinthFactory.createWallessLabyrinth();
+        Labyrinth client_lab = new Labyrinth(LabyrinthType.WALLESS);
         Game_status client_status = new Game_status();
         network_Client Test_Client;
 

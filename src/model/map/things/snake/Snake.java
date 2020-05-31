@@ -1,8 +1,14 @@
 package model.map.things.snake;
 
 import model.Game;
+import model.map.Field;
+import model.map.Labyrinth;
+import model.util.Directions;
+import model.util.Point;
+import model.util.SnakeMemento;
 import model.util.Steppable;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Snake implements Steppable {
@@ -14,6 +20,50 @@ public class Snake implements Steppable {
     public Snake(SnakeHead head, List<SnakeBodyPart> body){
         this.head = head;
         this.body = body;
+    }
+
+    public Snake(SnakeMemento sm, Labyrinth l){
+        head = new SnakeHead();
+        head.setDirection(sm.getDir());
+        head.setSnake(this);
+        Field headField = l.getFields()[sm.getHead().getX()][sm.getHead().getY()];
+        head.setField(headField);
+        headField.accept(head);
+
+        body = new LinkedList<>();
+        Field bodyField = l.getFields()[sm.getBodyParts().get(0).getX()][sm.getBodyParts().get(0).getY()];
+        SnakeBodyPart sbp = new SnakeBodyPart(head);
+        sbp.setField(bodyField);
+        bodyField.accept(sbp);
+        for (int i = 1; i < sm.getBodyParts().size(); i++){
+            sbp = new SnakeBodyPart(body.get(i-1));
+            bodyField = l.getFields()[sm.getBodyParts().get(i).getX()][sm.getBodyParts().get(i).getY()];
+            sbp.setField(bodyField);
+            bodyField.accept(sbp);
+            body.add(sbp);
+        }
+
+        points = sm.getPoints();
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public SnakeHead getHead() {
+        return head;
+    }
+
+    public List<SnakeBodyPart> getBody() {
+        return body;
+    }
+
+    public Snake(){
+
     }
 
     @Override
@@ -46,5 +96,9 @@ public class Snake implements Steppable {
 
     protected void die(){
         game.endGame();
+    }
+
+    public Directions getDir(){
+        return head.getDir();
     }
 }
