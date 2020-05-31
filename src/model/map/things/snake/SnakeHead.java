@@ -35,4 +35,8 @@ public class SnakeHead extends SnakePart {
     public void setSnake(Snake snake){
         this.snek = snake;
     }
+
+    public Directions getDir(){
+        return dir;
+    }
 }
