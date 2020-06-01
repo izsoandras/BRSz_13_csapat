@@ -33,8 +33,16 @@ public class LabyrinthMemento {
     public LabyrinthMemento(Labyrinth labyrinth) {
         this.snakeMemento = new SnakeMemento(labyrinth.getSnake());
         this.food = labyrinth.getFood().getField().getKoord();
-        this.bonus = labyrinth.getBonus().getField().getKoord();
-        this.danger = labyrinth.getDanger().getField().getKoord();
+        if(labyrinth.getBonus() != null){
+            this.bonus = labyrinth.getBonus().getField().getKoord();
+        }else{
+            this.bonus = null;
+        }
+        if(labyrinth.getDanger() != null){
+            this.danger = labyrinth.getDanger().getField().getKoord();
+        }else{
+            this.danger = null;
+        }
         this.type = labyrinth.getType();
         this.timeSinceLastExtra = labyrinth.getTimeSinceLastExtra();
     }
