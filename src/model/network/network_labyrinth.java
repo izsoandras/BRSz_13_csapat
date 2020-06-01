@@ -1,8 +1,8 @@
 package model.network;
-import model.map.Labyrinth;
+import model.map.LabyrinthMemento;
 
 public class network_labyrinth implements java.io.Serializable {
-    public Labyrinth Labyrinth_data;
+    public LabyrinthMemento Labyrinth_data;
     public Game_status Status;
 
     public network_labyrinth(){

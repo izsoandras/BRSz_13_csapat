@@ -3,6 +3,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import model.map.Labyrinth;
+import model.map.LabyrinthMemento;
 
 import model.map.Labyrinth;
 
@@ -34,7 +35,7 @@ public class network_Server extends network_core {
 //    }
 
     public synchronized void UpdateLocallabyrinth(Labyrinth newlabyrinth, Game_status newstatus) {
-        Local_labyrinth.Labyrinth_data = newlabyrinth;
+        Local_labyrinth.Labyrinth_data = new LabyrinthMemento(newlabyrinth);
         Local_labyrinth.Status = newstatus;
         Locallabyrinth_updated = true;
         Sync_signal.doNotify();
@@ -107,7 +108,7 @@ public class network_Server extends network_core {
             //send local lab and receive client lab
             try {
                 Obj_outputstream.writeObject(Local_labyrinth);
-                Opponent_labyrinth.Labyrinth_data = (Labyrinth) Obj_inputstream.readObject();
+                Opponent_labyrinth.Labyrinth_data = (LabyrinthMemento) Obj_inputstream.readObject();
             } catch (Exception e) {
                 e.printStackTrace();
             }
