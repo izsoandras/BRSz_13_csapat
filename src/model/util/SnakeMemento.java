@@ -10,7 +10,7 @@ import java.util.List;
 
 /** Saves the state of the snake.
  * */
-public class SnakeMemento {
+public class SnakeMemento implements java.io.Serializable{
     /** The position of the head
      * */
     private Point head;

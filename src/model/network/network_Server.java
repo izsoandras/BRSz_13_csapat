@@ -27,7 +27,7 @@ public class network_Server extends network_core {
     public network_Server() throws IOException {
         super();
         Server_socket = new ServerSocket( 22222 );
-        //System.out.printf("Child constr run\n");
+        //System.out.println("Child constr run\n");
     }
 
 //    public void network_Server(int portnumber) throws IOException {
@@ -43,7 +43,7 @@ public class network_Server extends network_core {
 
     public void run(){
         Running = true;
-        System.out.printf("Server started\n");
+        System.out.println("Server started\n");
         while(!Connected) {
                 try {
                     GameSocket = Server_socket.accept();
@@ -53,7 +53,7 @@ public class network_Server extends network_core {
                     e.printStackTrace();
                     return;
                 }
-                System.out.printf("Server recieved client connection\n");
+                System.out.println("Server recieved client connection\n");
                 try {
                     //STREAMS
                     //Outputs
@@ -94,8 +94,13 @@ public class network_Server extends network_core {
         try {
             //sending local labyrinth with game data to client
             Obj_outputstream.writeObject(Local_labyrinth);
+            Locallabyrinth_updated = false;
+            System.out.println("Labyrinth data provided for settings!");
         } catch (Exception e) {
             e.printStackTrace();
+            Running = false;
+            Connected = false;
+            return;
         }
 
 
@@ -108,9 +113,13 @@ public class network_Server extends network_core {
             //send local lab and receive client lab
             try {
                 Obj_outputstream.writeObject(Local_labyrinth);
-                Opponent_labyrinth.Labyrinth_data = (LabyrinthMemento) Obj_inputstream.readObject();
+                Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
+                Locallabyrinth_updated = false;
             } catch (Exception e) {
                 e.printStackTrace();
+                Running = false;
+                Connected = false;
+                return;
             }
             //if either guy exits game is over
             if(Opponent_labyrinth.Status.Exited || Local_labyrinth.Status.Exited){

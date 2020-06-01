@@ -6,7 +6,7 @@ import model.util.SnakeMemento;
 
 /** Stores the state of the labyrinth in a way it can be restored
  * */
-public class LabyrinthMemento {
+public class LabyrinthMemento implements java.io.Serializable{
     /** The saved state of the snake
      * */
     private SnakeMemento snakeMemento;

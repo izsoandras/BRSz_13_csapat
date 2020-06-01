@@ -1,6 +1,6 @@
 package model.network;
 
-public class Game_status {
+public class Game_status implements java.io.Serializable{
     public volatile boolean Ready;
     public volatile boolean Finished;
     public volatile boolean  Paused;

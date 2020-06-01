@@ -2,7 +2,7 @@ package model.util;
 
 /** Simple class to represent 2D integer coordinates.
  * */
-public class Point {
+public class Point implements java.io.Serializable{
     /** The X coordinate of the point
      * */
     private int X;
