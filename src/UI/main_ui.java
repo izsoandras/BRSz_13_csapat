@@ -6,7 +6,9 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -61,7 +63,7 @@ public class main_ui extends Application {
         Label lb = new Label("Játék");
         Label Score = new Label("Score: ");      //játék állása kell
 
-        Button btnBack = new Button("Back");
+        Button btnBack = new Button("Back");    //játékot el kell menteni
         btnBack.setOnAction(e->{mainWindow.setScene(Menu);});
 
 
@@ -98,8 +100,19 @@ public class main_ui extends Application {
         Button btnBack = new Button("Back");
         btnBack.setOnAction(e->{mainWindow.setScene(Menu);});
 
+        ChoiceBox<String> choiceBox = new ChoiceBox<>();
+        choiceBox.getItems().addAll("Kezdő", "Haladó", "Profi");
+        choiceBox.setValue("Kezdő");
+
+        ChoiceBox<String> choiceBox2 = new ChoiceBox<>();
+        choiceBox2.getItems().addAll("Falak nélkül", "Körbe falak", "Akadályokkal");
+        choiceBox2.setValue("Falak nélkül");
+
+        Button btnSave = new Button("Save");
+        btnSave.setOnAction(e->getChoice(choiceBox, choiceBox2));
+
         VBox root = new VBox();
-        root.getChildren().addAll(lb, btnBack);
+        root.getChildren().addAll(lb, btnBack, choiceBox, choiceBox2, btnSave);
         Settings = new Scene(root, 600,600);
     }
     private void constructToplist(){
@@ -115,10 +128,18 @@ public class main_ui extends Application {
 
 
     public static void tick(GraphicsContext gc) {
-    //játék logikája
+        //játék logikája
         gc.setFill(Color.RED);
         gc.setFont(new Font("", 50));
         gc.fillText("GAME OVER", 100, 250);
         return;
+
     }
+    private void getChoice(ChoiceBox<String> choiceBox, ChoiceBox<String> choiceBox2){
+        String level = choiceBox.getValue();
+        String walls = choiceBox2.getValue();
+        System.out.println(level);
+        System.out.println(walls);
+    }
+
 }
