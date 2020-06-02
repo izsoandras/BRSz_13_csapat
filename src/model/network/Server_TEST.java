@@ -16,16 +16,36 @@ public class Server_TEST {
         Thread thread = new Thread(Test_Server);
         thread.start();
 
-        //System.out.printf("%b",Test_Server.isRunning());
-        while(Test_Server.isRunning()){
-            while(!Test_Server.isConnected()){
-            }
-            Test_Server.UpdateLocallabyrinth(server_lab, server_status);
+        while(!Test_Server.isRunning()){
             try {
-                Thread.sleep(1000);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+        //System.out.printf("Server running!\n");
+        while(!Test_Server.isConnected()){
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        //System.out.printf("Pushing labyrinth for data...\n");
+        Test_Server.UpdateLocallabyrinth(server_lab, server_status);
+
+
+        //System.out.printf("%b",Test_Server.isRunning());
+        while(Test_Server.isRunning()){
+            try {
+                //System.out.printf("Waiting...\n");
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Test_Server.UpdateLocallabyrinth(server_lab, server_status);
+            System.out.println("Local_labyrinth sent!\n");
+
         }
     }
 }

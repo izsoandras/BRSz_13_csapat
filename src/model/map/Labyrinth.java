@@ -70,6 +70,8 @@ public class Labyrinth implements Steppable {
         danger = null;
     }
 
+    /** Creates a Labyrinth from it's saved state
+     * */
     public Labyrinth(LabyrinthMemento memento){
         timeSinceLastExtra = memento.getTimeSinceLastExtra();
 
@@ -91,15 +93,23 @@ public class Labyrinth implements Steppable {
         food.setField(foodField);
         foodField.accept(food);
 
-        bonus = new Bonus(this);
-        Field bonusField = fields[memento.getBonus().getX()][memento.getBonus().getY()];
-        food.setField(bonusField);
-        bonusField.accept(food);
+        if(memento.getBonus() != null) {
+            bonus = new Bonus(this);
+            Field bonusField = fields[memento.getBonus().getX()][memento.getBonus().getY()];
+            bonus.setField(bonusField);
+            bonusField.accept(bonus);
+        }else{
+            bonus = null;
+        }
 
-        danger = new Danger(this);
-        Field dangerField = fields[memento.getDanger().getX()][memento.getDanger().getY()];
-        food.setField(dangerField);
-        dangerField.accept(food);
+        if(memento.getDanger() != null) {
+            danger = new Danger(this);
+            Field dangerField = fields[memento.getDanger().getX()][memento.getDanger().getY()];
+            danger.setField(dangerField);
+            dangerField.accept(danger);
+        }else{
+            danger = null;
+        }
     }
 
     /** To be called when the Snake eats the food. Generates a new one
@@ -199,6 +209,8 @@ public class Labyrinth implements Steppable {
         return  emptyFields;
     }
 
+    /** Creates the map without any walls
+     * */
     private void createWallessLabyrinth(){
         final int SNAKE_BODY_LENGTH = 5;
         final int SNAKE_START_X = 30;
@@ -246,9 +258,14 @@ public class Labyrinth implements Steppable {
         return  fields;
     }
 
+    /** Returns a saved state of the labyrinth, from which it can be restored
+     * */
     public LabyrinthMemento makeMemento(){
         return new LabyrinthMemento(this);
     }
+
+    /** Getter functions
+     * */
 
     public Food getFood() {
         return food;

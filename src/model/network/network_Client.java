@@ -1,13 +1,12 @@
 package model.network;
-        import java.io.*;
-        import java.net.ServerSocket;
-        import java.net.Socket;
-        import model.map.Labyrinth;
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import model.map.Labyrinth;
+import model.map.LabyrinthMemento;
 
-        import model.map.Labyrinth;
-
-        import java.net.Socket;
-        import java.net.SocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 
 public class network_Client extends network_core {
     //Private variables
@@ -28,7 +27,7 @@ public class network_Client extends network_core {
 //        GameSocket = new Socket(IP_addr, portnum);
 //    }
     public synchronized void UpdateLocallabyrinth(Labyrinth newlabyrinth, Game_status newstatus) {
-        Local_labyrinth.Labyrinth_data = newlabyrinth;
+        Local_labyrinth.Labyrinth_data = new LabyrinthMemento(newlabyrinth);
         Local_labyrinth.Status = newstatus;
         //Locallabyrinth_updated = true;
         //Sync_signal.doNotify();
@@ -71,7 +70,8 @@ public class network_Client extends network_core {
                 Thread.sleep(100);
             }
             if(Reader.ready()) {
-                Opponent_labyrinth.Labyrinth_data = (Labyrinth) Obj_inputstream.readObject();
+                Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
+                System.out.println("Labyrinth data accuired for settings!\n");
             }
         } catch (Exception e) {
             Running = false;
@@ -81,9 +81,11 @@ public class network_Client extends network_core {
 
         while( Running ){
             try {
-                if(Reader.ready()) {
-                    Opponent_labyrinth.Labyrinth_data = (Labyrinth) Obj_inputstream.readObject();
+                if(inputstream.ready()) {
+                    System.out.println(" " + Reader.ready() + "\n");
+                    Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
                     Obj_outputstream.writeObject(Local_labyrinth);
+                    //System.out.printf("Labyrinth updated!\n");
                 }
             } catch (Exception e) {
                 Running = false;
