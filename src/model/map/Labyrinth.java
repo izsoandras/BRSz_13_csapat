@@ -1,6 +1,7 @@
 package model.map;
 
 import model.GameParams;
+import model.map.things.Wall;
 import model.map.things.pickups.Bonus;
 import model.map.things.pickups.Danger;
 import model.map.things.pickups.Food;
@@ -61,8 +62,10 @@ public class Labyrinth implements Steppable {
                 createWallessLabyrinth();
                 break;
             case WALLED:
+                createWalledLabyrinth();
                 break;
             case EXTRA:
+                createExtraLabyrinth();
                 break;
         }
         generateNewFood();
@@ -217,22 +220,53 @@ public class Labyrinth implements Steppable {
         final int SNAKE_START_Y = 30;
 
         this.fields = makeFields(GameParams.LABYRINTH_WIDTH, GameParams.LABYRINTH_HEIGHT);
-        SnakeHead snakeHead = new SnakeHead();
-        snakeHead.setDirection(Directions.RIGHT);
-        List<SnakeBodyPart> sbp = new LinkedList<>();
-        sbp.add(new SnakeBodyPart(snakeHead));
-        for(int i = 1; i < SNAKE_BODY_LENGTH; i++){
-            sbp.add( new SnakeBodyPart( sbp.get(i-1) ) );
+        placeSnake(SNAKE_START_X,SNAKE_START_Y,SNAKE_BODY_LENGTH);
+    }
+
+    /** Creates the map surrounded by walls
+     * */
+    private void createWalledLabyrinth(){
+        final int SNAKE_BODY_LENGTH = 5;
+        final int SNAKE_START_X = 30;
+        final int SNAKE_START_Y = 30;
+
+        fields = makeFields(GameParams.LABYRINTH_WIDTH, GameParams.LABYRINTH_HEIGHT);
+
+        //Place walls on first and last column of labyrinth
+        for(int i = 0; i < fields[0].length; i++){
+            putWall(0,i);
+            putWall(GameParams.LABYRINTH_WIDTH-1,i);
+        }
+        //Place walls on first and last row of labyrinth
+        for(int i = 1; i < fields.length-1; i++){
+            putWall(i,0);
+            putWall(i,GameParams.LABYRINTH_HEIGHT-1);
         }
 
-        snakeHead.setField(fields[SNAKE_START_X][SNAKE_START_Y]);
-        fields[SNAKE_START_X][SNAKE_START_Y].accept(snakeHead);
-        for(int i = 0; i < sbp.size(); i++){
-            sbp.get(i).setField(fields[SNAKE_START_X+i+1][SNAKE_START_Y]);
-            fields[SNAKE_START_X+i+1][SNAKE_START_Y].accept(sbp.get(i));
+        placeSnake(SNAKE_START_X,SNAKE_START_Y,SNAKE_BODY_LENGTH);
+    }
+
+    /** Creates the map with extra obstacles
+     * */
+    private void createExtraLabyrinth(){
+        final int SNAKE_BODY_LENGTH = 5;
+        final int SNAKE_START_X = 4;
+        final int SNAKE_START_Y = GameParams.LABYRINTH_HEIGHT-1;
+
+        fields = makeFields(GameParams.LABYRINTH_WIDTH, GameParams.LABYRINTH_HEIGHT);
+
+        //Put walls in 2 middle rows
+        for(int i = 2; i < fields.length-2; i++){
+            putWall(i,GameParams.LABYRINTH_HEIGHT/2-1);
+            putWall(i,GameParams.LABYRINTH_HEIGHT/2);
+        }
+        //Put walls in 2 middle columns
+        for(int i = 2; i < fields[0].length-2; i++){
+            putWall(GameParams.LABYRINTH_WIDTH/2-1,i);
+            putWall(GameParams.LABYRINTH_WIDTH/2,i);
         }
 
-        this.snake = new Snake(snakeHead, sbp);
+        placeSnake(SNAKE_START_X,SNAKE_START_Y,SNAKE_BODY_LENGTH);
     }
 
     /** Generates and joins the empty fields of the labyrinth
@@ -256,6 +290,44 @@ public class Labyrinth implements Steppable {
         }
 
         return  fields;
+    }
+
+    /** Adds the snake into the labyrinth.
+     *  No checks done (IndexOutOf bounds, or is the field empty)
+     * @param headX - The X coordinate of the snake's head
+     * @param headY - The Y coordinate of the snake's head
+     * @param length - The length of the snake (incl. the head)
+     * */
+    private void placeSnake(int headX, int headY, int length){
+        SnakeHead snakeHead = new SnakeHead();
+        snakeHead.setDirection(Directions.RIGHT);
+        List<SnakeBodyPart> sbp = new LinkedList<>();
+        sbp.add(new SnakeBodyPart(snakeHead));
+        for(int i = 1; i < length; i++){
+            sbp.add( new SnakeBodyPart( sbp.get(i-1) ) );
+        }
+
+        snakeHead.setField(fields[headX][headY]);
+        fields[headX][headY].accept(snakeHead);
+        for(int i = 0; i < sbp.size(); i++){
+            sbp.get(i).setField(fields[headX+i+1][headY]);
+            fields[headX+i+1][headY].accept(sbp.get(i));
+        }
+
+        this.snake = new Snake(snakeHead, sbp);
+    }
+
+    /** Places a Wall on the Field given by the coordinates.
+     * @param x - The X coordinate of the Field
+     * @param y - The Y coordinate of the Field
+     * */
+    private void putWall(int x, int y){
+        Wall wall = new Wall();
+        wall.setField(fields[x][y]);
+        fields[x][y].accept(wall);
+        wall = new Wall();
+        wall.setField(fields[x][y]);
+        fields[x][y].accept(wall);
     }
 
     /** Returns a saved state of the labyrinth, from which it can be restored
