@@ -12,7 +12,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -50,27 +50,32 @@ public class main_ui extends Application {
         Label lb = new Label("Menü");
         Button btnGame =new Button("Single Game");
         btnGame.setOnAction(e ->{mainWindow.setScene(Game);});
+        btnGame.setStyle("-fx-background-color: SKYBLUE");
 
         Button btnLoadGame =new Button("Load Game");
         btnLoadGame.setOnAction(e ->{mainWindow.setScene(Game);});  //ide még kell egy játék betöltés is
+        btnLoadGame.setStyle("-fx-background-color: SKYBLUE");
 
         Button btnSettings =new Button("Settings");
         btnSettings.setOnAction(e ->{mainWindow.setScene(Settings);});
+        btnSettings.setStyle("-fx-background-color: SKYBLUE");
 
         Button btnMulti =new Button("Multi player");
         btnMulti.setOnAction(e ->{mainWindow.setScene(Multi1);});     //multiplayer kezelés
+        btnMulti.setStyle("-fx-background-color: SKYBLUE");
 
         Button btnToplist =new Button("Toplista");
         btnToplist.setOnAction(e ->{mainWindow.setScene(Toplist);});
+        btnToplist.setStyle("-fx-background-color: SKYBLUE");
 
-        VBox root1= new VBox();
-        root1.getChildren().add(lb);
-        root1.setAlignment(Pos.TOP_CENTER);
         VBox root = new VBox();
         root.setSpacing(60);
         root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(root1, btnGame, btnLoadGame, btnSettings, btnMulti, btnToplist);
+        root.getChildren().addAll(btnGame, btnLoadGame, btnSettings, btnMulti, btnToplist);
         Menu=new Scene(root, 600, 600);
+        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(background_fill);
+        root.setBackground(background);
     }
     private void constructGame(){
         Label lb = new Label("Játék");
@@ -112,21 +117,34 @@ public class main_ui extends Application {
 
         Button btnBack = new Button("Back");
         btnBack.setOnAction(e->{mainWindow.setScene(Menu);});
+        btnBack.setStyle("-fx-background-color: SALMON");
 
         ChoiceBox<String> choiceBox = new ChoiceBox<>();
         choiceBox.getItems().addAll("Kezdő", "Haladó", "Profi");
         choiceBox.setValue("Kezdő");
+        choiceBox.setStyle("-fx-background-color: SKYBLUE");
 
         ChoiceBox<String> choiceBox2 = new ChoiceBox<>();
         choiceBox2.getItems().addAll("Falak nélkül", "Körbe falak", "Akadályokkal");
         choiceBox2.setValue("Falak nélkül");
+        choiceBox2.setStyle("-fx-background-color: SKYBLUE");
 
         Button btnSave = new Button("Save");
         btnSave.setOnAction(e->getChoice(choiceBox, choiceBox2));
+        btnSave.setStyle("-fx-background-color: SKYBLUE");
 
-        VBox root = new VBox();
-        root.getChildren().addAll(lb, btnBack, choiceBox, choiceBox2, btnSave);
+        VBox vb = new VBox();
+        vb.getChildren().addAll(choiceBox, choiceBox2, btnSave);
+        vb.setAlignment(Pos.CENTER);
+        vb.setSpacing(50);
+
+        BorderPane root = new BorderPane();
+        root.setTop(btnBack);
+        root.setCenter(vb);
         Settings = new Scene(root, 600,600);
+        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(background_fill);
+        root.setBackground(background);
     }
     private void constructToplist(){
         Label lb = new Label("Toplista");
@@ -142,32 +160,58 @@ public class main_ui extends Application {
         Label lb = new Label("Multiplayer");
         Button btnHost =new Button("Host Game");
         btnHost.setOnAction(e ->{mainWindow.setScene(MultiWait);});
+        btnHost.setStyle("-fx-background-color: SKYBLUE");
 
         Button btnGuest =new Button("Guest Game");
         btnGuest.setOnAction(e ->{mainWindow.setScene(MultiIP);});
+        btnGuest.setStyle("-fx-background-color: SKYBLUE");
 
         Button btnBack =new Button("Back");
         btnBack.setOnAction(e ->{mainWindow.setScene(Menu);});
+        btnBack.setStyle("-fx-background-color: SALMON");
 
-        VBox root = new VBox();
-        root.getChildren().addAll(lb, btnBack, btnHost, btnGuest);
+        VBox vb = new VBox();
+        vb.getChildren().addAll(btnHost, btnGuest);
+        vb.setAlignment(Pos.CENTER);
+        vb.setSpacing(50);
+        BorderPane root = new BorderPane();
+        root.setTop(btnBack);
+        root.setCenter(vb);
         Multi1 = new Scene(root, 600, 600);
+        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(background_fill);
+        root.setBackground(background);
     }
     private void constructMultiIP(){
         Label lb = new Label("Multiplayer");
         Button btnBack =new Button("Back");
         btnBack.setOnAction(e ->{mainWindow.setScene(Menu);});
+        btnBack.setStyle("-fx-background-color: SALMON");
+
         Label lb2 = new Label("Host IP címe:");
 
         Button btnConnect =new Button("Connect");
+        btnConnect.setStyle("-fx-background-color: SKYBLUE");
         btnConnect.setOnAction(e ->{mainWindow.setScene(MultiWait);});
 
         TextField textHostIP = new TextField();
         textHostIP.setOnKeyPressed(e ->{if(e.getCode()== KeyCode.ENTER){System.out.println(textHostIP.getText());}});
+        textHostIP.setMaxWidth(120);
+        textHostIP.setStyle("-fx-background-color: SKYBLUE");
 
-        VBox root = new VBox();
-        root.getChildren().addAll(lb, btnBack, lb2, textHostIP, btnConnect);
+        VBox vb = new VBox();
+        vb.getChildren().addAll(lb2, textHostIP,btnConnect);
+        vb.setSpacing(10);
+        vb.setAlignment(Pos.CENTER);
+        BorderPane root = new BorderPane();
+        root.setTop(btnBack);
+        root.setCenter(vb);
+
+
         MultiIP = new Scene(root, 600, 600);
+        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(background_fill);
+        root.setBackground(background);
     }
     private void constructMultiWait(){
         Label lb = new Label("Multiplayer");
