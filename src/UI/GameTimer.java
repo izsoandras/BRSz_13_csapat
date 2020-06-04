@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.skin.TextInputControlSkin;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -12,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.Game;
 import model.map.Labyrinth;
+import model.util.Directions;
 import model.util.LabyrinthType;
 
 public class GameTimer {
@@ -53,21 +55,21 @@ public class GameTimer {
         primaryStage.show();
 
         //controll
-        /*Scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
             if (key.getCode() == KeyCode.W) {
-                direction = Dir.up;
+                game.getLabyrinth().getSnake().getHead().setDirection(Directions.UP);
             }
             if (key.getCode() == KeyCode.A) {
-                direction = Dir.left;
+                game.getLabyrinth().getSnake().getHead().setDirection(Directions.LEFT);
             }
             if (key.getCode() == KeyCode.S) {
-                direction = Dir.down;
+                game.getLabyrinth().getSnake().getHead().setDirection(Directions.DOWN);
             }
             if (key.getCode() == KeyCode.D) {
-                direction = Dir.right;
+                game.getLabyrinth().getSnake().getHead().setDirection(Directions.RIGHT);
             }
 
-        });*/
+        });
 
 
 
@@ -103,7 +105,6 @@ public class GameTimer {
         }
 
             //gc.fillOval(game.getLabyrinth().getDanger().getField().getKoord().getX()*blocksize, game.getLabyrinth().getDanger().getField().getKoord().getY()*blocksize, 10, 10);
-
 
 
 
