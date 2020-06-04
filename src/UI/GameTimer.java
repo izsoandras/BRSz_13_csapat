@@ -13,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.Game;
 import model.map.Labyrinth;
+import model.map.things.Wall;
 import model.util.Directions;
 import model.util.LabyrinthType;
 
@@ -96,14 +97,28 @@ public class GameTimer {
         gc.fillOval(game.getLabyrinth().getFood().getField().getKoord().getX()* blocksize, game.getLabyrinth().getFood().getField().getKoord().getY() * blocksize, blocksize, blocksize);
 
         //veszély rajzolása
-        gc.setFill(Color.YELLOW);
-        gc.fillRect(game.getLabyrinth().getDanger().getField().getKoord().getX()*blocksize, game.getLabyrinth().getDanger().getField().getKoord().getY()*blocksize,10,10);
+        if(game.getLabyrinth().getDanger()!=null) {
+            gc.setFill(Color.YELLOW);
+            gc.fillRect(game.getLabyrinth().getDanger().getField().getKoord().getX() * blocksize, game.getLabyrinth().getDanger().getField().getKoord().getY() * blocksize, 10, 10);
+        }
 
         //bónusz rajzolása
-        gc.setFill(Color.GREEN);
-        gc.fillOval(game.getLabyrinth().getBonus().getField().getKoord().getX()*blocksize, game.getLabyrinth().getBonus().getField().getKoord().getY()*blocksize,10,10);
+        if(game.getLabyrinth().getBonus()!=null) {
+            gc.setFill(Color.GREEN);
+            gc.fillOval(game.getLabyrinth().getBonus().getField().getKoord().getX() * blocksize, game.getLabyrinth().getBonus().getField().getKoord().getY() * blocksize, 10, 10);
+        }
+/*
+        //fal kirajzolása
+        gc.setFill(Color.BLACK);
+        for(int i=0;i<60;i++){
+            for(int j=0;j<90;j++){
+                if(game.getLabyrinth().getFields()[i][j]==game.getLabyrinth().getFields(){
+                    gc.fillRect(i*blocksize, j*blocksize, 10,10);
+                }
+            }
 
-
+        }
+*/
         //kígyó kirajzolása
         gc.setFill(Color.GREEN);
         //feje
