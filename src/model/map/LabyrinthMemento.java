@@ -4,6 +4,8 @@ import model.util.LabyrinthType;
 import model.util.Point;
 import model.util.SnakeMemento;
 
+import java.io.Serializable;
+
 /** Stores the state of the labyrinth in a way it can be restored
  * */
 public class LabyrinthMemento implements java.io.Serializable{

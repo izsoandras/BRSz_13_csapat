@@ -46,6 +46,12 @@ public class SnakeHead extends SnakePart {
         snek.grow();
     }
 
+    /** Increases the snake's speed
+     * */
+    public void speedUp(){
+        snek.speedUp();
+    }
+
     /** Setter and getter methods
      * */
 

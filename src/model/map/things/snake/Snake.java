@@ -11,6 +11,8 @@ import model.util.Steppable;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * */
 public class Snake implements Steppable {
     private Game game;
     private SnakeHead head;
@@ -22,7 +24,7 @@ public class Snake implements Steppable {
         this.body = body;
     }
 
-    public Snake(SnakeMemento sm, Labyrinth l){
+    public Snake(SnakeMemento sm, Labyrinth l ){
         head = new SnakeHead();
         head.setDirection(sm.getDir());
         head.setSnake(this);
@@ -62,9 +64,9 @@ public class Snake implements Steppable {
         return body;
     }
 
-    public Snake(){
-
-    }
+//    public Snake(){
+//
+//    }
 
     @Override
     public void step() {
@@ -73,6 +75,10 @@ public class Snake implements Steppable {
 
     protected void addPoints(int earnedPoints){
         points += earnedPoints;
+    }
+
+    protected void speedUp(){
+        game.increaseSpeed();
     }
 
     protected void removePoints(int lostPoints){

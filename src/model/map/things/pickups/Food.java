@@ -28,6 +28,7 @@ public class Food extends Thing {
         labyrinth.removeFood();
         getField().removeThing();
         sh.addPoints(POINTS_PER_FOOD);
+        sh.speedUp();
         sh.grow();
     }
 }
