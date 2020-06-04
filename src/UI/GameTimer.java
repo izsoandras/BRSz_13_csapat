@@ -26,7 +26,7 @@ public class GameTimer {
                     return;
                 }
 
-                if (now - lastTick > 1000000000 / 5) {
+                if (now - lastTick > 1000000000 / game.getSpeed()) {
                     lastTick = now;
                     tick();
 
