@@ -44,6 +44,8 @@ public class Labyrinth implements Steppable {
     /** The Fields that make up the labyrinth
      * */
     private Field[][] fields;
+
+    private List<Wall> walls = new LinkedList<>();
     /** Random number generator for Food and Extra placement
      * */
     private Random rng = new Random();
@@ -299,8 +301,7 @@ public class Labyrinth implements Steppable {
      * @param length - The length of the snake (incl. the head)
      * */
     private void placeSnake(int headX, int headY, int length){
-        SnakeHead snakeHead = new SnakeHead();
-        snakeHead.setDirection(Directions.RIGHT);
+        SnakeHead snakeHead = new SnakeHead(Directions.RIGHT);
         List<SnakeBodyPart> sbp = new LinkedList<>();
         sbp.add(new SnakeBodyPart(snakeHead));
         for(int i = 1; i < length; i++){
@@ -308,10 +309,11 @@ public class Labyrinth implements Steppable {
         }
 
         snakeHead.setField(fields[headX][headY]);
+        snakeHead.setDirection(Directions.RIGHT);
         fields[headX][headY].accept(snakeHead);
         for(int i = 0; i < sbp.size(); i++){
             sbp.get(i).setField(fields[headX+i+1][headY]);
-            fields[headX+i+1][headY].accept(sbp.get(i));
+            fields[headX-i-1][headY].accept(sbp.get(i));
         }
 
         this.snake = new Snake(snakeHead, sbp);
@@ -325,9 +327,7 @@ public class Labyrinth implements Steppable {
         Wall wall = new Wall();
         wall.setField(fields[x][y]);
         fields[x][y].accept(wall);
-        wall = new Wall();
-        wall.setField(fields[x][y]);
-        fields[x][y].accept(wall);
+        walls.add(wall);
     }
 
     /** Returns a saved state of the labyrinth, from which it can be restored
@@ -365,5 +365,9 @@ public class Labyrinth implements Steppable {
 
     public Field[][] getFields() {
         return fields;
+    }
+
+    public List<Wall> getWalls() {
+        return walls;
     }
 }

@@ -21,12 +21,12 @@ public class Snake implements Steppable {
 
     public Snake(SnakeHead head, List<SnakeBodyPart> body){
         this.head = head;
+        head.setSnake(this);
         this.body = body;
     }
 
     public Snake(SnakeMemento sm, Labyrinth l ){
-        head = new SnakeHead();
-        head.setDirection(sm.getDir());
+        head = new SnakeHead(sm.getDir());
         head.setSnake(this);
         Field headField = l.getFields()[sm.getHead().getX()][sm.getHead().getY()];
         head.setField(headField);

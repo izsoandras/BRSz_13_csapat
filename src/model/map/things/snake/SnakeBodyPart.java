@@ -1,6 +1,7 @@
 package model.map.things.snake;
 
 import model.map.Field;
+import model.map.things.Thing;
 
 /** A part of the snake's body, that's following the head
  * */
@@ -39,6 +40,15 @@ public class SnakeBodyPart extends SnakePart {
      * */
     @Override
     public void hitBy(SnakeHead sh){
+        sh.behead();
+    }
+
+    @Override
+    public void collideWith(Thing t){
+        t.hitBy(this);
+    }
+
+    public void collideWith(SnakeHead sh){
         sh.behead();
     }
 }

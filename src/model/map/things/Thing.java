@@ -2,6 +2,7 @@ package model.map.things;
 
 import model.map.Field;
 import model.map.things.pickups.Extra;
+import model.map.things.snake.SnakeBodyPart;
 import model.map.things.snake.SnakeHead;
 
 /** Represents the stuff that can be found in the labyrinth.
@@ -23,6 +24,8 @@ public abstract class Thing {
      * @param t The other thing
      * */
     public void hitBy(Thing t){}
+
+    public void hitBy(SnakeBodyPart sbp){}
     /** The general Thing does nothing when hit by any other thing. Should be overridden to perform an action.
      * @param sh The other thing
      * */
