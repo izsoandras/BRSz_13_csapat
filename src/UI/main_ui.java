@@ -56,11 +56,13 @@ public class main_ui extends Application {
         mainWindow.setTitle("Snake Game");
         mainWindow.show();
     }
+
+
     private void constructMenu(){
         Button btnSingle = new Button("Single Player");
         btnSingle.setOnAction(e->{
             mainWindow.setScene(Game);
-            gt.SingleGame(lab, speed);
+            gt.SingleGame(lab, speed, mainWindow);
         });
         btnSingle.setStyle("-fx-background-color: SKYBLUE");
 
@@ -99,14 +101,15 @@ public class main_ui extends Application {
             m.serialize();*/
             mainWindow.setScene(Menu);
         });
-
+        System.out.println(LABYRINTH_WIDTH);
+        System.out.println(LABYRINTH_HEIGHT);
         Canvas c = new Canvas(LABYRINTH_WIDTH*block_size, LABYRINTH_HEIGHT*block_size);
         GraphicsContext gc = c.getGraphicsContext2D();
 
         BorderPane root = new BorderPane();
         root.setTop(btnBack);
-        root.setCenter(c);
-        Game = new Scene(root, 600,600);
+        root.setBottom(c);
+        Game = new Scene(root, 900,650);
         BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(background_fill);
         root.setBackground(background);
