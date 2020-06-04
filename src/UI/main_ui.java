@@ -2,6 +2,7 @@ package UI;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,13 +13,16 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.Game;
+import model.GameMemento;
 import model.map.Labyrinth;
 import model.util.LabyrinthType;
+import UI.GameTimer;
 
 import static model.GameParams.LABYRINTH_HEIGHT;
 import static model.GameParams.LABYRINTH_WIDTH;
@@ -26,12 +30,13 @@ import static model.GameParams.LABYRINTH_WIDTH;
 public class main_ui extends Application {
     private Stage mainWindow;
     private Scene Menu, Settings, Toplist, Game, Multi1, MultiIP, MultiWait, MultiGame, NameIn;
+    private int speed=5;
+    private LabyrinthType lab = LabyrinthType.WALLESS;
 
     static int block_size = 10; //10pixel egy blokk mérete
     int width=LABYRINTH_WIDTH;       //blokkok száma
     int height=LABYRINTH_HEIGHT;
-
-    private static Game game;
+    GameTimer gt= new GameTimer();
 
     @Override
     public void start(Stage ps) {
@@ -52,83 +57,59 @@ public class main_ui extends Application {
         mainWindow.show();
     }
     private void constructMenu(){
-        Label lb = new Label("Menü");
-        Button btnGame =new Button("Single Game");
-        btnGame.setOnAction(e ->{mainWindow.setScene(Game);});
-        btnGame.setStyle("-fx-background-color: SKYBLUE");
+        Button btnSingle = new Button("Single Player");
+        btnSingle.setOnAction(e->{
+            mainWindow.setScene(Game);
+            gt.SingleGame(lab, speed);
+        });
+        btnSingle.setStyle("-fx-background-color: SKYBLUE");
 
-        Button btnLoadGame =new Button("Load Game");
-        btnLoadGame.setOnAction(e ->{mainWindow.setScene(Game);});  //ide még kell egy játék betöltés is
-        btnLoadGame.setStyle("-fx-background-color: SKYBLUE");
+        Button btnLoad = new Button("Load Game");
+        btnLoad.setOnAction(e->{mainWindow.setScene(Game);});
+        btnLoad.setStyle("-fx-background-color: SKYBLUE");
 
-        Button btnSettings =new Button("Settings");
-        btnSettings.setOnAction(e ->{mainWindow.setScene(Settings);});
+        Button btnSettings = new Button("Settings");
+        btnSettings.setOnAction(e->{mainWindow.setScene(Settings);});
         btnSettings.setStyle("-fx-background-color: SKYBLUE");
 
-        Button btnMulti =new Button("Multi player");
-        btnMulti.setOnAction(e ->{mainWindow.setScene(Multi1);});     //multiplayer kezelés
+        Button btnMulti = new Button("Multi Player");
+        btnMulti.setOnAction(e->{mainWindow.setScene(Multi1);});
         btnMulti.setStyle("-fx-background-color: SKYBLUE");
 
-        Button btnToplist =new Button("Toplista");
-        btnToplist.setOnAction(e ->{mainWindow.setScene(Toplist);});
+        Button btnToplist = new Button("Toplist");
+        btnToplist.setOnAction(e->{mainWindow.setScene(Toplist);});
         btnToplist.setStyle("-fx-background-color: SKYBLUE");
 
         VBox root = new VBox();
-        root.setSpacing(60);
+        root.setSpacing(50);
         root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(btnGame, btnLoadGame, btnSettings, btnMulti, btnToplist);
-        Menu=new Scene(root, 600, 600);
+        root.getChildren().addAll(btnSingle, btnLoad, btnSettings, btnMulti, btnToplist);
+        Menu = new Scene(root, 600,600);
         BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(background_fill);
         root.setBackground(background);
     }
+
     private void constructGame(){
-        Label lb = new Label("Játék");
-        Label Score = new Label("Score: ");      //játék állása kell
 
         Button btnBack = new Button("Back");    //játékot el kell menteni
-        btnBack.setOnAction(e->{mainWindow.setScene(Menu);});
-        /* GameMemento m = game.getMemento();
-            m.serialize();
-        * */
+        btnBack.setStyle("-fx-background-color: SALMON");
+        btnBack.setOnAction(e->{
+            /*GameMemento m = game.getMemento();
+            m.serialize();*/
+            mainWindow.setScene(Menu);
+        });
 
-
-        VBox root = new VBox();
-        root.getChildren().addAll(lb, Score, btnBack);
-        Game = new Scene(root, 600,600);
         Canvas c = new Canvas(LABYRINTH_WIDTH*block_size, LABYRINTH_HEIGHT*block_size);
         GraphicsContext gc = c.getGraphicsContext2D();
-        root.getChildren().add(c);
 
-        game = new Game();
-
-        Labyrinth labyrinth = new Labyrinth(LabyrinthType.WALLESS);
-        /*
-            labirintus létrehozása
-            új játék indítása a paramétereknek megfelelően
-            (game.startGame(labyrinth, startSpeed);
-         */
-
-
-        new AnimationTimer() {
-            long lastTick = 0;
-
-            public void handle(long now) {
-                if (lastTick == 0) {
-                    lastTick = now;
-                    tick(gc);
-                    return;
-                }
-
-                if (now - lastTick > 1000000000 / game.getSpeed()) {  //speed=5
-                    lastTick = now;
-                    tick(gc);
-                }
-            }
-
-        }.start();
-
-
+        BorderPane root = new BorderPane();
+        root.setTop(btnBack);
+        root.setCenter(c);
+        Game = new Scene(root, 600,600);
+        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(background_fill);
+        root.setBackground(background);
     }
     private void constructSettings(){
         Label lb = new Label("Beállítások");
@@ -168,11 +149,16 @@ public class main_ui extends Application {
         Label lb = new Label("Toplista");
 
         Button btnBack = new Button("Back");
+        btnBack.setStyle("-fx-background-color: SALMON");
         btnBack.setOnAction(e->{mainWindow.setScene(Menu);});
 
-        VBox root = new VBox();
-        root.getChildren().addAll(lb, btnBack);
+        BorderPane root = new BorderPane();
+        root.setTop(btnBack);
+        root.setCenter(lb);
         Toplist = new Scene(root, 600,600);
+        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(background_fill);
+        root.setBackground(background);
     }
     private void constructMulti1(){
         Label lb = new Label("Multiplayer");
@@ -234,17 +220,28 @@ public class main_ui extends Application {
     private void constructMultiWait(){
         Label lb = new Label("Multiplayer");
         Button btnBack =new Button("Back");
+        btnBack.setStyle("-fx-background-color: SALMON");
         btnBack.setOnAction(e ->{mainWindow.setScene(Menu);});
         Label lb2 = new Label("If you ready press the button");
 
         Button btnReady =new Button("Ready");
+        btnReady.setStyle("-fx-background-color: SKYBLUE");
         btnReady.setOnAction(e ->{mainWindow.setScene(MultiGame);});
 
-        VBox root = new VBox();
-        root.getChildren().addAll(lb, btnBack, lb2, btnReady);
+        VBox vb = new VBox();
+        vb.getChildren().addAll(lb2, btnReady);
+        vb.setAlignment(Pos.CENTER);
+        vb.setSpacing(20);
+        BorderPane root = new BorderPane();
+        root.setTop(btnBack);
+        root.setCenter(vb);
+
         MultiWait = new Scene(root, 600, 600);
+        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(background_fill);
+        root.setBackground(background);
     }
-    private void constructMultiGame(){
+    private void constructMultiGame(){      //újra kell írni
         Label lb = new Label("Multi Game");
         Label Score = new Label("Score: ");      //játék állása kell
 
@@ -259,7 +256,7 @@ public class main_ui extends Application {
         Canvas c = new Canvas(LABYRINTH_WIDTH*block_size, LABYRINTH_HEIGHT*block_size);
         GraphicsContext gc = c.getGraphicsContext2D();
         root.getChildren().add(c);
-
+/*  Ezt még ki kell találni
         new AnimationTimer() {
             long lastTick = 0;
 
@@ -270,14 +267,14 @@ public class main_ui extends Application {
                     return;
                 }
 
-                if (now - lastTick > 1000000000 / 5) {  //speed=5
+                if (now - lastTick > 1000000000 / 5 ) {  //speed=5  game.getSpeed()
                     lastTick = now;
                     tick(gc);
                 }
             }
 
         }.start();
-
+*/
     }
 
     private void constructNameIn(){
@@ -291,27 +288,36 @@ public class main_ui extends Application {
         VBox root = new VBox();
         root.getChildren().addAll(lb, textName, btnSubmit);
         NameIn = new Scene(root, 600, 600);
+        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(background_fill);
+        root.setBackground(background);
     }
 
-    public static void tick(GraphicsContext gc) {
-        //játék logikája
-        game.step();
-
-        /*
-            labirintus rajzolasa
-        * */
-
-        gc.setFill(Color.RED);
-        gc.setFont(new Font("", 50));
-        gc.fillText("GAME OVER", 100, 250);
-        return;
-
-    }
     private void getChoice(ChoiceBox<String> choiceBox, ChoiceBox<String> choiceBox2){
-        String level = choiceBox.getValue();
-        String walls = choiceBox2.getValue();
-        System.out.println(level);
-        System.out.println(walls);
-    }
 
+        switch (choiceBox.getValue()) {
+            case "Kezdő":
+                speed = 5;
+                break;
+            case "Haladó":
+                speed = 8;
+                break;
+            case "Profi":
+                speed = 11;
+                break;
+        }
+        switch (choiceBox2.getValue()) {
+            case "Falak nélkül":
+                lab = LabyrinthType.WALLESS;
+                break;
+            case "Körbe falak":
+                lab = LabyrinthType.WALLED;
+                break;
+            case "Akadályokkal":
+                lab = LabyrinthType.EXTRA;
+                break;
+        }
+        System.out.println(lab);
+        System.out.println(speed);
+    }
 }
