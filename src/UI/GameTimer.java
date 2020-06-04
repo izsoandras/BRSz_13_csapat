@@ -56,16 +56,16 @@ public class GameTimer {
 
         //controll
         scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            if (key.getCode() == KeyCode.W) {
+            if (key.getCode() == KeyCode.UP) {
                 game.getLabyrinth().getSnake().getHead().setDirection(Directions.UP);
             }
-            if (key.getCode() == KeyCode.A) {
+            if (key.getCode() == KeyCode.LEFT) {
                 game.getLabyrinth().getSnake().getHead().setDirection(Directions.LEFT);
             }
-            if (key.getCode() == KeyCode.S) {
+            if (key.getCode() == KeyCode.DOWN) {
                 game.getLabyrinth().getSnake().getHead().setDirection(Directions.DOWN);
             }
-            if (key.getCode() == KeyCode.D) {
+            if (key.getCode() == KeyCode.RIGHT) {
                 game.getLabyrinth().getSnake().getHead().setDirection(Directions.RIGHT);
             }
 
@@ -84,16 +84,25 @@ public class GameTimer {
             System.out.println("game over");
             return;
         }
+
         game.step();
 
-
-
+        //tábla törlés
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, 900 , 600);
 
         //food rajzolás
         gc.setFill(Color.RED);
         gc.fillOval(game.getLabyrinth().getFood().getField().getKoord().getX()* blocksize, game.getLabyrinth().getFood().getField().getKoord().getY() * blocksize, blocksize, blocksize);
+
+        //veszély rajzolása
+        gc.setFill(Color.YELLOW);
+        gc.fillRect(game.getLabyrinth().getDanger().getField().getKoord().getX()*blocksize, game.getLabyrinth().getDanger().getField().getKoord().getY()*blocksize,10,10);
+
+        //bónusz rajzolása
+        gc.setFill(Color.GREEN);
+        gc.fillOval(game.getLabyrinth().getBonus().getField().getKoord().getX()*blocksize, game.getLabyrinth().getBonus().getField().getKoord().getY()*blocksize,10,10);
+
 
         //kígyó kirajzolása
         gc.setFill(Color.GREEN);
