@@ -15,19 +15,20 @@ public class Game implements Steppable{
      * */
     private Labyrinth labyrinth;
 
+    /** The speed of the game
+     * */
+    private int speed = 0;
+
+    private boolean snakeAlive = true;
+
     // TODO: hogyan adja vissza a játék eredményét?
     /** Begin the game by enabling the timer
      * @param labyrinth the start state of the game elements
      * */
-    public void startGame(Labyrinth labyrinth){
+    public void startGame(Labyrinth labyrinth, int startSpeed){
         this.labyrinth = labyrinth;
+        this.speed = startSpeed;
         // TODO: set up timer to call labyrinth.step
-    }
-
-    /** Pause the timer when player is in Esc menu
-     * */
-    public void pauseGame(){
-        // TODO: pause timer
     }
 
     /** Clean up the session after snake dies
@@ -51,5 +52,17 @@ public class Game implements Steppable{
     @Override
     public void step() {
         labyrinth.step();
+    }
+
+
+    /** Getter methods.
+     * */
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public boolean isSnakeAlive() {
+        return snakeAlive;
     }
 }

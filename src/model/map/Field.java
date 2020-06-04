@@ -18,7 +18,7 @@ public class Field {
      * */
     private Field[] neighbors = new Field[4];
 
-    private Point koord;
+    private Point koord;    // TODO: bal felso legyen a 0,0
 
     public Field(Point koord){
         this.koord = koord;

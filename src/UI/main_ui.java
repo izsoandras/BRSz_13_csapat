@@ -16,6 +16,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import model.Game;
+import model.map.Labyrinth;
+import model.util.LabyrinthType;
 
 import static model.GameParams.LABYRINTH_HEIGHT;
 import static model.GameParams.LABYRINTH_WIDTH;
@@ -27,6 +30,8 @@ public class main_ui extends Application {
     static int block_size = 10; //10pixel egy blokk mérete
     int width=LABYRINTH_WIDTH;       //blokkok száma
     int height=LABYRINTH_HEIGHT;
+
+    private static Game game;
 
     @Override
     public void start(Stage ps) {
@@ -83,6 +88,9 @@ public class main_ui extends Application {
 
         Button btnBack = new Button("Back");    //játékot el kell menteni
         btnBack.setOnAction(e->{mainWindow.setScene(Menu);});
+        /* GameMemento m = game.getMemento();
+            m.serialize();
+        * */
 
 
         VBox root = new VBox();
@@ -91,6 +99,16 @@ public class main_ui extends Application {
         Canvas c = new Canvas(LABYRINTH_WIDTH*block_size, LABYRINTH_HEIGHT*block_size);
         GraphicsContext gc = c.getGraphicsContext2D();
         root.getChildren().add(c);
+
+        game = new Game();
+
+        Labyrinth labyrinth = new Labyrinth(LabyrinthType.WALLESS);
+        /*
+            labirintus létrehozása
+            új játék indítása a paramétereknek megfelelően
+            (game.startGame(labyrinth, startSpeed);
+         */
+
 
         new AnimationTimer() {
             long lastTick = 0;
@@ -102,7 +120,7 @@ public class main_ui extends Application {
                     return;
                 }
 
-                if (now - lastTick > 1000000000 / 5) {  //speed=5
+                if (now - lastTick > 1000000000 / game.getSpeed()) {  //speed=5
                     lastTick = now;
                     tick(gc);
                 }
@@ -277,6 +295,12 @@ public class main_ui extends Application {
 
     public static void tick(GraphicsContext gc) {
         //játék logikája
+        game.step();
+
+        /*
+            labirintus rajzolasa
+        * */
+
         gc.setFill(Color.RED);
         gc.setFont(new Font("", 50));
         gc.fillText("GAME OVER", 100, 250);
