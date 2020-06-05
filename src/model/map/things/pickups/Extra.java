@@ -15,10 +15,10 @@ public abstract class Extra extends Thing implements Steppable {
     private int timeCounter = 0;
     /** The number of steps till the Extra can be collected by the snake
      * */
-    private int lifeLength = 10;
+    private int lifeLength = 1000;
     /** The Extra is slower than the snake. This is the prescaler of that speed
      * */
-    private static final int STEP_PRESCALER = 2;
+    private static final int STEP_PRESCALER = 10;
     /** The labyrinth in which the Extra can be found
      * */
     private Labyrinth labyrinth;
@@ -44,9 +44,13 @@ public abstract class Extra extends Thing implements Steppable {
             boolean accepted = false;
             int offset = 0;
             while(!accepted && offset < Directions.values().length){
+                getField().removeThing();
                 accepted = getField().getNeighbor(dirs[dirIdx]).accept(this);
-                offset++;
+                    offset++;
             }
+            if(!accepted)
+                getField().accept(this);
+            timeCounter = 0;
         }
     }
 

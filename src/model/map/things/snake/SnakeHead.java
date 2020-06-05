@@ -1,6 +1,7 @@
 package model.map.things.snake;
 
 import model.map.things.Thing;
+import model.map.things.pickups.Extra;
 import model.util.Directions;
 
 /** Represents the head of the snake. It stores the direction where it goes and has a pointer to the whole snake.
@@ -27,7 +28,7 @@ public class SnakeHead extends SnakePart {
         getField().removeThing();
 
         getField().getNeighbor(dir).accept(this);
-        System.out.println("x: "+getField().getKoord().getX()+" y: "+getField().getKoord().getY());
+        this.lastDir = this.dir;
     }
 
     @Override
@@ -38,6 +39,11 @@ public class SnakeHead extends SnakePart {
     @Override
     public void hitBy(SnakeBodyPart sbp) {
         snek.die();
+    }
+
+    @Override
+    public void hitBy(Extra e){
+        e.hitBy(this);
     }
 
     /** Tis function is called when the snake hits a wall or itself.
@@ -87,7 +93,6 @@ public class SnakeHead extends SnakePart {
     public void setDirection(Directions dir){
         if((dir.ordinal()+2)%4 != lastDir.ordinal()) {
             this.dir = dir;
-            this.lastDir = this.dir;
         }
     }
 }

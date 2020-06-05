@@ -31,7 +31,7 @@ public class Danger extends Extra {
     @Override
     public void hitBy(SnakeHead sh){
         sh.removePoints(MINUS_POINTS);
-        super.getLabyrinth().removeBonus();
+        super.getLabyrinth().removeDanger();
         getField().removeThing();
     }
 }

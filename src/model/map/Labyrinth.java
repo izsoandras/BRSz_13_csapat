@@ -79,7 +79,7 @@ public class Labyrinth implements Steppable {
      * */
     public Labyrinth(LabyrinthMemento memento){
         timeSinceLastExtra = memento.getTimeSinceLastExtra();
-
+        //TODO: mentes utan visszaallitani a tobbi palyat is
         this.type = memento.getType();
         switch (type){
             case WALLESS:
@@ -154,7 +154,7 @@ public class Labyrinth implements Steppable {
         if(danger != null)
             danger.step();
         //if enough time passed, place new extras
-        if(timeSinceLastExtra >= timeBetweenExtras){
+        if(timeSinceLastExtra >= timeBetweenExtras){ //TODO: ez az elvart mukodes? hogy ne rakjon le mindig ujat?
             if(bonus == null){
                 bonus = new Bonus(this);
                 Field place = chooseRandomEmptyField();
@@ -252,7 +252,7 @@ public class Labyrinth implements Steppable {
      * */
     private void createExtraLabyrinth(){
         final int SNAKE_BODY_LENGTH = 5;
-        final int SNAKE_START_X = 4;
+        final int SNAKE_START_X = 5;
         final int SNAKE_START_Y = GameParams.LABYRINTH_HEIGHT-1;
 
         fields = makeFields(GameParams.LABYRINTH_WIDTH, GameParams.LABYRINTH_HEIGHT);
