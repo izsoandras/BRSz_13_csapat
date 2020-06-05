@@ -37,6 +37,7 @@ public class Snake implements Steppable {
         SnakeBodyPart sbp = new SnakeBodyPart(head);
         sbp.setField(bodyField);
         bodyField.accept(sbp);
+        body.add(sbp);
         for (int i = 1; i < sm.getBodyParts().size(); i++){
             sbp = new SnakeBodyPart(body.get(i-1));
             bodyField = l.getFields()[sm.getBodyParts().get(i).getX()][sm.getBodyParts().get(i).getY()];
