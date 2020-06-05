@@ -45,7 +45,7 @@ public class main_ui extends Application {
         constructMenu();
         constructSettings();
         constructToplist();
-        constructGame();
+        //constructGame();
         constructMulti1();
         constructMultiIP();
         constructMultiWait();
@@ -61,8 +61,8 @@ public class main_ui extends Application {
     private void constructMenu(){
         Button btnSingle = new Button("Single Player");
         btnSingle.setOnAction(e->{
-            mainWindow.setScene(Game);
-            gt.SingleGame(lab, speed, mainWindow);
+            mainWindow.setScene(Menu);
+            gt.SingleGame(lab, speed);
         });
         btnSingle.setStyle("-fx-background-color: SKYBLUE");
 
@@ -92,15 +92,13 @@ public class main_ui extends Application {
         root.setBackground(background);
     }
 
-    private void constructGame(){
+    //private void constructGame(){
 
-        Button btnBack = new Button("Back");    //játékot el kell menteni
-        btnBack.setStyle("-fx-background-color: SALMON");
-        btnBack.setOnAction(e->{
+
             /*GameMemento m = game.getMemento();
             m.serialize();*/
-            mainWindow.setScene(Menu);
-        });
+           /* mainWindow.setScene(Menu);
+
         Canvas c = new Canvas(LABYRINTH_WIDTH*block_size, LABYRINTH_HEIGHT*block_size);
         GraphicsContext gc = c.getGraphicsContext2D();
 
@@ -108,10 +106,8 @@ public class main_ui extends Application {
         root.setTop(btnBack);
         root.setBottom(c);
         Game = new Scene(root, 900,650);
-        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
-        Background background = new Background(background_fill);
-        root.setBackground(background);
-    }
+
+    }*/
     private void constructSettings(){
         Label lb = new Label("Beállítások");
 

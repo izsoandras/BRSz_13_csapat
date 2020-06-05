@@ -23,10 +23,12 @@ import javax.swing.*;
 public class GameTimer {
     private static Game game;
     private static int blocksize=10;
+    private static boolean pause=false;
+    private static AnimationTimer gameTimer;
 
 
 
-    public void SingleGame(LabyrinthType lab, int speed, Stage primaryStage) {
+    public void SingleGame(LabyrinthType lab, int speed) {
         Labyrinth labyrinth = new Labyrinth(lab);   //labirintus létrehozása beállítások alapján
         game = new Game(labyrinth, speed);     //Játék indítátasa beállítások alapján
 
@@ -36,7 +38,7 @@ public class GameTimer {
         GraphicsContext gc = c.getGraphicsContext2D();
         root.getChildren().add(c);
 
-        new AnimationTimer() {
+        gameTimer=new AnimationTimer() {
             long lastTick = 0;
 
 
@@ -54,10 +56,15 @@ public class GameTimer {
                 }
             }
 
-        }.start();
+        };
+        if(game.isSnakeAlive()){
+            gameTimer.start();
+        }
+
+        Stage gameStage = new Stage();
         Scene scene = new Scene(root, 900, 600);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        gameStage.setScene(scene);
+        gameStage.show();
 
         //controll
         scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
@@ -75,7 +82,32 @@ public class GameTimer {
             }
 
         });
+        //pause
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+            if (key.getCode() == KeyCode.P && !pause) {
+                pause=true;
+            }else{
+                pause=false;
+            }
+        });
 
+        //exit
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+            if (key.getCode() == KeyCode.ESCAPE) {
+                if(game.isSnakeAlive()){
+                    //mentés és kilépés
+                    System.out.println("escape alive");
+                    gameStage.close();
+                    gameTimer.stop();
+                }else {
+                    //kilépés
+                    System.out.println("escape dead");
+                    gameStage.close();
+                    gameTimer.stop();
+                    return;
+                }
+            }
+        });
 
 
 
@@ -85,12 +117,14 @@ public class GameTimer {
         if (!game.isSnakeAlive()) {
             gc.setFill(Color.RED);
             gc.setFont(new Font("", 50));
-            gc.fillText("GAME OVER", 100, 250);
+            gc.fillText("GAME OVER", 300, 300);
+            gc.fillText("Score: "+ game.getLabyrinth().getSnake().getPoints(), 350, 370);
             System.out.println("game over");
             return;
         }
-
-        game.step();
+        if(!pause) {
+            game.step();
+        }
 
         //tábla törlés
         gc.setFill(Color.WHITE);
