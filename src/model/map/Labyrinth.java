@@ -252,7 +252,7 @@ public class Labyrinth implements Steppable {
      * */
     private void createExtraLabyrinth(){
         final int SNAKE_BODY_LENGTH = 5;
-        final int SNAKE_START_X = 4;
+        final int SNAKE_START_X = 10;
         final int SNAKE_START_Y = GameParams.LABYRINTH_HEIGHT-1;
 
         fields = makeFields(GameParams.LABYRINTH_WIDTH, GameParams.LABYRINTH_HEIGHT);
