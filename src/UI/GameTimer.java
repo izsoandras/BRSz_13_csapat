@@ -107,9 +107,21 @@ public class GameTimer {
             gc.setFill(Color.GREEN);
             gc.fillOval(game.getLabyrinth().getBonus().getField().getKoord().getX() * blocksize, game.getLabyrinth().getBonus().getField().getKoord().getY() * blocksize, 10, 10);
         }
-/*
+
         //fal kirajzolása
-        gc.setFill(Color.BLACK);
+        if(game.getLabyrinth().getWalls()!=null){
+            gc.setFill(Color.BLACK);
+            for(int i=0;i<game.getLabyrinth().getWalls().size();i++){
+                gc.fillRect(game.getLabyrinth().getWalls().get(i).getField().getKoord().getX()*blocksize, game.getLabyrinth().getWalls().get(i).getField().getKoord().getY()*blocksize, 10, 10);
+            }
+
+        }
+
+
+
+
+
+    /*  gc.setFill(Color.BLACK);
         for(int i=0;i<60;i++){
             for(int j=0;j<90;j++){
                 if(game.getLabyrinth().getFields()[i][j]==game.getLabyrinth().getFields(){
