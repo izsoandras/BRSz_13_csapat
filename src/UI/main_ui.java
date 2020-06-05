@@ -101,8 +101,6 @@ public class main_ui extends Application {
             m.serialize();*/
             mainWindow.setScene(Menu);
         });
-        System.out.println(LABYRINTH_WIDTH);
-        System.out.println(LABYRINTH_HEIGHT);
         Canvas c = new Canvas(LABYRINTH_WIDTH*block_size, LABYRINTH_HEIGHT*block_size);
         GraphicsContext gc = c.getGraphicsContext2D();
 

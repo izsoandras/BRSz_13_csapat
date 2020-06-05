@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.control.skin.TextInputControlSkin;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -17,24 +18,27 @@ import model.map.things.Wall;
 import model.util.Directions;
 import model.util.LabyrinthType;
 
+import javax.swing.*;
+
 public class GameTimer {
     private static Game game;
     private static int blocksize=10;
 
 
 
-    public void SingleGame(LabyrinthType lab, int speed, Stage primaryStage){
+    public void SingleGame(LabyrinthType lab, int speed, Stage primaryStage) {
         Labyrinth labyrinth = new Labyrinth(lab);   //labirintus létrehozása beállítások alapján
         game = new Game(labyrinth, speed);     //Játék indítátasa beállítások alapján
 
 
         VBox root = new VBox();
-        Canvas c = new Canvas(90*blocksize, 60*blocksize);
+        Canvas c = new Canvas(90 * blocksize, 60 * blocksize);
         GraphicsContext gc = c.getGraphicsContext2D();
         root.getChildren().add(c);
 
         new AnimationTimer() {
             long lastTick = 0;
+
 
             public void handle(long now) {
                 if (lastTick == 0) {
@@ -77,7 +81,7 @@ public class GameTimer {
 
     }
     public static void tick(GraphicsContext gc) {
-        //játék logikája
+
         if (!game.isSnakeAlive()) {
             gc.setFill(Color.RED);
             gc.setFont(new Font("", 50));
@@ -114,23 +118,16 @@ public class GameTimer {
             for(int i=0;i<game.getLabyrinth().getWalls().size();i++){
                 gc.fillRect(game.getLabyrinth().getWalls().get(i).getField().getKoord().getX()*blocksize, game.getLabyrinth().getWalls().get(i).getField().getKoord().getY()*blocksize, 10, 10);
             }
-
         }
 
-
-
-
-
-    /*  gc.setFill(Color.BLACK);
-        for(int i=0;i<60;i++){
-            for(int j=0;j<90;j++){
-                if(game.getLabyrinth().getFields()[i][j]==game.getLabyrinth().getFields(){
-                    gc.fillRect(i*blocksize, j*blocksize, 10,10);
-                }
-            }
-
+        //score
+        if(game.getLabyrinth().getType()==LabyrinthType.WALLED) {
+            gc.setFill(Color.WHITE);
+        }else{
+            gc.setFill(Color.BLACK);
         }
-*/
+        gc.fillText("Score: "+ game.getLabyrinth().getSnake().getPoints(), 10 ,10);
+
         //kígyó kirajzolása
         gc.setFill(Color.GREEN);
         //feje
@@ -139,16 +136,5 @@ public class GameTimer {
         for (int i = 0; i < game.getLabyrinth().getSnake().getBody().size(); i++) {
             gc.fillRect(game.getLabyrinth().getSnake().getBody().get(i).getField().getKoord().getX()*blocksize, game.getLabyrinth().getSnake().getBody().get(i).getField().getKoord().getY() * blocksize, 10, 10);
         }
-
-            //gc.fillOval(game.getLabyrinth().getDanger().getField().getKoord().getX()*blocksize, game.getLabyrinth().getDanger().getField().getKoord().getY()*blocksize, 10, 10);
-
-
-
-
-
-        //    labirintus rajzolasa
-
-
-
     }
 }
