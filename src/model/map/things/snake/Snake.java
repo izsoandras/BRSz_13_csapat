@@ -98,6 +98,8 @@ public class Snake implements Steppable {
         // and the field of the last part is supposed to be set by it's new field during the return sequence
         newSbp.setField(currentLastPart.getField());
         currentLastPart.getField().accept(newSbp);
+
+        body.add(newSbp);
     }
 
     protected void die(){
