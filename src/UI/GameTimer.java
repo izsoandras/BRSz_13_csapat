@@ -199,10 +199,12 @@ public class GameTimer {
         });
         //pause
         scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            if (key.getCode() == KeyCode.P && !pause) {
-                pause=true;
-            }else{
-                pause=false;
+            if (key.getCode() == KeyCode.P) {
+                if (!pause) {
+                    pause = true;
+                } else {
+                    pause = false;
+                }
             }
         });
 
