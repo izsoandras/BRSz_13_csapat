@@ -62,12 +62,15 @@ public class main_ui extends Application {
         Button btnSingle = new Button("Single Player");
         btnSingle.setOnAction(e->{
             mainWindow.setScene(Menu);
-            gt.SingleGame(lab, speed);
+            gt.SingleGame(lab,speed);
         });
         btnSingle.setStyle("-fx-background-color: SKYBLUE");
 
         Button btnLoad = new Button("Load Game");
-        btnLoad.setOnAction(e->{mainWindow.setScene(Game);});
+        btnLoad.setOnAction(e->{
+            mainWindow.setScene(Menu);
+            gt.LoadGame();
+        });
         btnLoad.setStyle("-fx-background-color: SKYBLUE");
 
         Button btnSettings = new Button("Settings");
