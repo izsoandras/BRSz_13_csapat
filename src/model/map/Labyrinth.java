@@ -15,7 +15,6 @@ import model.util.Steppable;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /** Represents the all-time game state
@@ -59,17 +58,7 @@ public class Labyrinth implements Steppable {
      * */
     public Labyrinth(LabyrinthType type){
         this.type = type;
-        switch (type){
-            case WALLESS:
-                createWallessLabyrinth();
-                break;
-            case WALLED:
-                createWalledLabyrinth();
-                break;
-            case EXTRA:
-                createExtraLabyrinth();
-                break;
-        }
+        createInhabitedLabyrinth();
         generateNewFood();
         bonus = null;
         danger = null;
@@ -79,17 +68,9 @@ public class Labyrinth implements Steppable {
      * */
     public Labyrinth(LabyrinthMemento memento){
         timeSinceLastExtra = memento.getTimeSinceLastExtra();
-        //TODO: mentes utan visszaallitani a tobbi palyat is
+
         this.type = memento.getType();
-        switch (type){
-            case WALLESS:
-                fields = makeFields(GameParams.LABYRINTH_WIDTH,GameParams.LABYRINTH_HEIGHT);
-                break;
-            case WALLED:
-                break;
-            case EXTRA:
-                break;
-        }
+        createEmptyLabyrinth();
 
         snake = new Snake(memento.getSnakeMemento(), this);
 
@@ -214,25 +195,50 @@ public class Labyrinth implements Steppable {
         return  emptyFields;
     }
 
+    private void createInhabitedLabyrinth(){
+        createEmptyLabyrinth();
+        placeSnake();
+    }
+
+
+    private void createEmptyLabyrinth(){
+        switch (type){
+            case WALLESS:{
+                createWallessLabyrinth();
+                break;}
+            case WALLED:{
+                createWalledLabyrinth();
+                break;}
+            case EXTRA:{
+                createExtraLabyrinth();
+                break;}
+        }
+    }
+
+    private void placeSnake(){
+        switch (type){
+            case WALLESS:
+            case WALLED:
+                putSnake(30,30,5);
+                break;
+            case EXTRA:
+                putSnake(5,GameParams.LABYRINTH_HEIGHT-1,5);
+                break;
+        }
+    }
+
+
     /** Creates the map without any walls
      * */
     private void createWallessLabyrinth(){
-        final int SNAKE_BODY_LENGTH = 5;
-        final int SNAKE_START_X = 30;
-        final int SNAKE_START_Y = 30;
+
 
         this.fields = makeFields(GameParams.LABYRINTH_WIDTH, GameParams.LABYRINTH_HEIGHT);
-        placeSnake(SNAKE_START_X,SNAKE_START_Y,SNAKE_BODY_LENGTH);
     }
 
     /** Creates the map surrounded by walls
      * */
-    private void createWalledLabyrinth(){
-        final int SNAKE_BODY_LENGTH = 5;
-        final int SNAKE_START_X = 30;
-        final int SNAKE_START_Y = 30;
-
-        fields = makeFields(GameParams.LABYRINTH_WIDTH, GameParams.LABYRINTH_HEIGHT);
+    private void createWalledLabyrinth(){fields = makeFields(GameParams.LABYRINTH_WIDTH, GameParams.LABYRINTH_HEIGHT);
 
         //Place walls on first and last column of labyrinth
         for(int i = 0; i < fields[0].length; i++){
@@ -244,16 +250,11 @@ public class Labyrinth implements Steppable {
             putWall(i,0);
             putWall(i,GameParams.LABYRINTH_HEIGHT-1);
         }
-
-        placeSnake(SNAKE_START_X,SNAKE_START_Y,SNAKE_BODY_LENGTH);
     }
 
     /** Creates the map with extra obstacles
      * */
     private void createExtraLabyrinth(){
-        final int SNAKE_BODY_LENGTH = 5;
-        final int SNAKE_START_X = 5;
-        final int SNAKE_START_Y = GameParams.LABYRINTH_HEIGHT-1;
 
         fields = makeFields(GameParams.LABYRINTH_WIDTH, GameParams.LABYRINTH_HEIGHT);
 
@@ -267,8 +268,6 @@ public class Labyrinth implements Steppable {
             putWall(GameParams.LABYRINTH_WIDTH/2-1,i);
             putWall(GameParams.LABYRINTH_WIDTH/2,i);
         }
-
-        placeSnake(SNAKE_START_X,SNAKE_START_Y,SNAKE_BODY_LENGTH);
     }
 
     /** Generates and joins the empty fields of the labyrinth
@@ -300,7 +299,7 @@ public class Labyrinth implements Steppable {
      * @param headY - The Y coordinate of the snake's head
      * @param length - The length of the snake (incl. the head)
      * */
-    private void placeSnake(int headX, int headY, int length){
+    private void putSnake(int headX, int headY, int length){
         SnakeHead snakeHead = new SnakeHead(Directions.RIGHT);
         List<SnakeBodyPart> sbp = new LinkedList<>();
         sbp.add(new SnakeBodyPart(snakeHead));
