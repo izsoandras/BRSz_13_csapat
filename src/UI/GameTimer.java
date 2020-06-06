@@ -87,10 +87,12 @@ public class GameTimer {
         });
         //pause
         scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            if (key.getCode() == KeyCode.P && !pause) {
-                pause=true;
-            }else{
-                pause=false;
+            if (key.getCode() == KeyCode.P) {
+                if(!pause){
+                    pause=true;
+                }else {
+                    pause = false;
+                }
             }
         });
 
@@ -135,6 +137,7 @@ public class GameTimer {
             fileIn.close();
             System.out.println("Játék betöltve");
         } catch (IOException i) {
+            System.out.println("hibára fut");
             i.printStackTrace();
             return;
         } catch (ClassNotFoundException c) {
@@ -196,10 +199,12 @@ public class GameTimer {
         });
         //pause
         scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            if (key.getCode() == KeyCode.P && !pause) {
-                pause=true;
-            }else{
-                pause=false;
+            if (key.getCode() == KeyCode.P) {
+                if (!pause) {
+                    pause = true;
+                } else {
+                    pause = false;
+                }
             }
         });
 
