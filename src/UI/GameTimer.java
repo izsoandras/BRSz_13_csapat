@@ -316,7 +316,24 @@ public class GameTimer {
         gc2.setFill(Color.RED);
         gc2.fillOval(labyrinthAnother.getFood().getField().getKoord().getX()* blocksize, labyrinthAnother.getFood().getField().getKoord().getY() * blocksize, blocksize, blocksize);
 
-
+        //veszély rajzolása
+        if(game.getLabyrinth().getDanger()!=null) {
+            gc1.setFill(Color.YELLOW);
+            gc1.fillRect(game.getLabyrinth().getDanger().getField().getKoord().getX() * blocksize, game.getLabyrinth().getDanger().getField().getKoord().getY() * blocksize, 10, 10);
+        }
+        if(labyrinthAnother.getDanger()!=null) {
+            gc2.setFill(Color.YELLOW);
+            gc2.fillRect(game.getLabyrinth().getDanger().getField().getKoord().getX() * blocksize, labyrinthAnother.getDanger().getField().getKoord().getY() * blocksize, 10, 10);
+        }
+        //bónusz rajzolása
+        if(game.getLabyrinth().getBonus()!=null) {
+            gc1.setFill(Color.GREEN);
+            gc1.fillOval(game.getLabyrinth().getBonus().getField().getKoord().getX() * blocksize, game.getLabyrinth().getBonus().getField().getKoord().getY() * blocksize, 10, 10);
+        }
+        if(game.getLabyrinth().getBonus()!=null) {
+            gc2.setFill(Color.GREEN);
+            gc2.fillOval(labyrinthAnother.getBonus().getField().getKoord().getX() * blocksize, labyrinthAnother.getBonus().getField().getKoord().getY() * blocksize, 10, 10);
+        }
     }
 
     public static void tick(GraphicsContext gc) {
