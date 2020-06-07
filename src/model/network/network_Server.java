@@ -56,6 +56,7 @@ public class network_Server extends network_core {
     }
 
     public void run(){
+        int exitedcnt = 0;
         Running = true;
         String msg;
         String readymsg = "Initvalue";
@@ -170,16 +171,16 @@ public class network_Server extends network_core {
             //send local lab and receive client lab
             try {
                 Obj_outputstream.writeObject(Local_labyrinth);
+                Obj_outputstream.flush();
+                Obj_outputstream.reset();
                 Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
+
                 System.out.println(Local_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX() +
                                             "      " + Local_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY() + " || " +
                                     Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX() +
                                     "      " + Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY());
-                if(Opponent_labyrinth.Status.Exited){
-                    Local_labyrinth.Status.Exited = true;
-                    Obj_outputstream.writeObject(Local_labyrinth);
-                    Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
-                }
+                System.out.println(Opponent_labyrinth.Status.Exited + " and " + Local_labyrinth.Status.Exited);
+
                 Locallabyrinth_updated = false;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -188,11 +189,22 @@ public class network_Server extends network_core {
                 return;
             }
             //if both guys exits game is over
-            if(Opponent_labyrinth.Status.Exited && Local_labyrinth.Status.Exited){
+            if(Opponent_labyrinth.Status.Exited || Local_labyrinth.Status.Exited){
                 Running = false;
                 System.out.println("Network thread closed.");
             }
         }
+
+        try {
+            Obj_outputstream.writeObject(Local_labyrinth);
+            while(!Reader.ready()){
+
+            }
+            Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
         Running = false;
         Connected = false;
