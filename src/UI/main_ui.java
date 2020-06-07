@@ -41,10 +41,10 @@ public class main_ui extends Application {
     GameTimer gt= new GameTimer();
     Game_status server_status= new Game_status();
     network_Server Test_Server= new network_Server();
-    Thread threadNetwork= new Thread(Test_Server);
+    Thread threadNetwork;
     Game_status client_status = new Game_status();
     network_Client Test_Client = new network_Client(IP);
-    Thread threadClient = new Thread(Test_Client);
+    Thread threadClient;
 
     @Override
     public void start(Stage ps) {
@@ -164,6 +164,7 @@ public class main_ui extends Application {
         Button btnHost =new Button("Host Game");
         btnHost.setOnAction(e ->{
             //szerver indítása
+            threadNetwork = new Thread(Test_Server);
             threadNetwork.start();
 
             while(!Test_Server.isRunning()){
@@ -246,6 +247,7 @@ public class main_ui extends Application {
         btnConnect.setOnAction(e ->{
             IP=textHostIP.getText();
             //Client start
+            threadClient = new Thread(Test_Client);
             Test_Client.set_clientIP(IP);
             System.out.println("Connection IP: "+ IP);
             threadClient.start();
@@ -263,6 +265,11 @@ public class main_ui extends Application {
             }else{
                 //threadClient stop
                 System.out.println("server invalid: " + Test_Client.isServerInvalid());
+                try {
+                    threadClient.join();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
