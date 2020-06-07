@@ -84,6 +84,8 @@ public class network_Client extends network_core {
     //__________________________________________________________________________________________________________________
     public void run(){
         String readymsg = "Initvalue";
+        int SnakeX = 0;
+        int SnakeY = 0;
         Running = true;
         Local_Ready = false;
         Opponent_Ready = false;
@@ -194,9 +196,13 @@ public class network_Client extends network_core {
         // PROGRAM RUNNING
         while( Running ){
             try {
+
                 if(inputstream.ready() && !Opponentlabyrinth_updated && !OpponentStatus_updated) {
                     //System.out.println(" " + Reader.ready() + "\n");
                     Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
+                    SnakeX = Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX();
+                    SnakeY = Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY();
+                    //System.out.println("Snake coordinates are:X - " + SnakeX + " , and Y - " + SnakeY);
                     Obj_outputstream.writeObject(Local_labyrinth);
                     Opponentlabyrinth_updated = true;
                     OpponentStatus_updated = true;

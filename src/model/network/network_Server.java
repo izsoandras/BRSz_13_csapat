@@ -170,6 +170,10 @@ public class network_Server extends network_core {
             try {
                 Obj_outputstream.writeObject(Local_labyrinth);
                 Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
+                System.out.println(Local_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX() +
+                                            " and " + Local_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY() + " || " +
+                                    Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX() +
+                                    " and " + Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY());
                 Locallabyrinth_updated = false;
             } catch (Exception e) {
                 e.printStackTrace();
