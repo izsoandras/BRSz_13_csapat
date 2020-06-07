@@ -198,10 +198,12 @@ public class network_Client extends network_core {
                     //System.out.println(" " + Reader.ready() + "\n");
 
                     Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
-                    if(Opponent_labyrinth.Status.Exited){
+                    if (Opponent_labyrinth.Status.Exited) {
                         Local_labyrinth.Status.Exited = true;
                     }
                     Obj_outputstream.writeObject(Local_labyrinth);
+                    Obj_outputstream.flush();
+                    Obj_outputstream.reset();
 
                     Opponentlabyrinth_updated = true;
                     OpponentStatus_updated = true;
@@ -210,11 +212,12 @@ public class network_Client extends network_core {
                             " and " + Local_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY() + " || " +
                             Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX() +
                             " and " + Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY());
-                    //System.out.printf("Labyrinth updated!\n");
-                }
-                if ( Local_labyrinth.Status.Exited && Opponent_labyrinth.Status.Exited){
-                    Running = false;
-                    System.out.println("Network thread closed.");
+                    //System.out.println("Labyrinth updated!\n");
+                    System.out.println(Local_labyrinth.Status.Exited + " and " + Opponent_labyrinth.Status.Exited);
+                    if (Local_labyrinth.Status.Exited || Opponent_labyrinth.Status.Exited) {
+                        Running = false;
+                        System.out.println("Network thread closed.");
+                    }
                 }
             } catch (Exception e) {
                 Running = false;
