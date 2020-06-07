@@ -113,12 +113,10 @@ public class GameTimer {
                     }catch (IOException i){
                         i.printStackTrace();
                     }
-                    System.out.println("escape alive");
                     gameStage.close();
                     gameTimer.stop();
                 }else {
                     //kilépés
-                    System.out.println("escape dead");
                     gameStage.close();
                     gameTimer.stop();
                     return;
@@ -135,9 +133,8 @@ public class GameTimer {
             gm = (GameMemento) in.readObject();
             in.close();
             fileIn.close();
-            System.out.println("Játék betöltve");
+            System.out.println("Game Loaded");
         } catch (IOException i) {
-            System.out.println("hibára fut");
             i.printStackTrace();
             return;
         } catch (ClassNotFoundException c) {
@@ -225,12 +222,10 @@ public class GameTimer {
                     }catch (IOException i){
                         i.printStackTrace();
                     }
-                    System.out.println("escape alive");
                     gameStage.close();
                     gameTimer.stop();
                 }else {
                     //kilépés
-                    System.out.println("escape dead");
                     gameStage.close();
                     gameTimer.stop();
                     return;
@@ -246,7 +241,6 @@ public class GameTimer {
             gc.setFont(new Font("", 50));
             gc.fillText("GAME OVER", 300, 300);
             gc.fillText("Score: "+ game.getLabyrinth().getSnake().getPoints(), 350, 370);
-            System.out.println("game over");
             return;
         }
         if(!pause) {
