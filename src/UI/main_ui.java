@@ -17,6 +17,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.network.Game_status;
+import model.network.network_Client;
 import model.network.network_Server;
 import model.util.LabyrinthType;
 
@@ -33,12 +34,16 @@ public class main_ui extends Application {
     private Scene Menu, Settings, Toplist, Game, Multi1, MultiIP, MultiWait, MultiGame, NameIn,MultiWaitGuest;
     private int speed=5;
     private LabyrinthType lab = LabyrinthType.WALLESS;
+    private String IP="192.168.0.27";
 
     static int block_size = 10; //10pixel egy blokk mérete
     GameTimer gt= new GameTimer();
-    Game_status server_status;
+    Game_status server_status= new Game_status();
     network_Server Test_Server= new network_Server();
-    Thread thread;
+    Thread threadNetwork= new Thread(Test_Server);
+    Game_status client_status = new Game_status();
+    network_Client Test_Client = new network_Client(IP);
+    Thread threadClient = new Thread(Test_Client);
 
     @Override
     public void start(Stage ps) {
@@ -157,10 +162,7 @@ public class main_ui extends Application {
         Button btnHost =new Button("Host Game");
         btnHost.setOnAction(e ->{
             //szerver indítása
-            server_status = new Game_status();
-            Test_Server = new network_Server();
-            thread = new Thread(Test_Server);
-            thread.start();
+            threadNetwork.start();
 
             while(!Test_Server.isRunning()){
                 try {
@@ -196,11 +198,28 @@ public class main_ui extends Application {
 
     private void constructMultiWaitGuest(){
         Label lb = new Label("Waiting for the Guest");
-        if(Test_Server.isConnected()){
+
+        Button btnConnect =new Button("Start Connection");
+        btnConnect.setOnAction(e ->{
+
+            while(!Test_Server.isConnected()){
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException exx) {
+                    exx.printStackTrace();
+                }
+            }
             mainWindow.setScene(MultiWait);
-        }
+        });
+        btnConnect.setStyle("-fx-background-color: SKYBLUE");
+
+
+        VBox vb = new VBox();
+        vb.getChildren().addAll(lb, btnConnect);
+        vb.setAlignment(Pos.CENTER);
+        vb.setSpacing(50);
         BorderPane root = new BorderPane();
-        root.setCenter(lb);
+        root.setCenter(vb);
         MultiWaitGuest = new Scene(root, 600,600);
         BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(background_fill);
@@ -217,10 +236,30 @@ public class main_ui extends Application {
 
         Button btnConnect =new Button("Connect");
         btnConnect.setStyle("-fx-background-color: SKYBLUE");
-        btnConnect.setOnAction(e ->{mainWindow.setScene(MultiWait);});
+        btnConnect.setOnAction(e ->{
+            //Client start
+            Test_Client.set_clientIP(IP);
+            System.out.println(IP);
+            threadClient.start();
+
+            while(!Test_Client.isConnected() && Test_Client.isServerInvalid() ){
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException exxx) {
+                    exxx.printStackTrace();
+                }
+            }
+
+            if(Test_Client.isConnected()) {
+                mainWindow.setScene(MultiWait);
+            }
+        });
 
         TextField textHostIP = new TextField();
-        textHostIP.setOnKeyPressed(e ->{if(e.getCode()== KeyCode.ENTER){System.out.println(textHostIP.getText());}});
+        textHostIP.setOnKeyPressed(e ->{if(e.getCode()== KeyCode.ENTER){
+            IP=textHostIP.getText();
+            System.out.println(textHostIP.getText());
+        }});
         textHostIP.setMaxWidth(120);
         textHostIP.setStyle("-fx-background-color: SKYBLUE");
 
