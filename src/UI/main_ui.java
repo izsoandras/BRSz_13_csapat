@@ -16,6 +16,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.network.Game_status;
+import model.network.network_Server;
 import model.util.LabyrinthType;
 
 
@@ -28,12 +30,15 @@ import static model.GameParams.LABYRINTH_WIDTH;
 
 public class main_ui extends Application {
     private Stage mainWindow;
-    private Scene Menu, Settings, Toplist, Game, Multi1, MultiIP, MultiWait, MultiGame, NameIn;
+    private Scene Menu, Settings, Toplist, Game, Multi1, MultiIP, MultiWait, MultiGame, NameIn,MultiWaitGuest;
     private int speed=5;
     private LabyrinthType lab = LabyrinthType.WALLESS;
 
     static int block_size = 10; //10pixel egy blokk mérete
     GameTimer gt= new GameTimer();
+    Game_status server_status;
+    network_Server Test_Server= new network_Server();
+    Thread thread;
 
     @Override
     public void start(Stage ps) {
@@ -43,6 +48,7 @@ public class main_ui extends Application {
         constructSettings();
         constructToplist();
         constructMulti1();
+        constructMultiWaitGuest();
         constructMultiIP();
         constructMultiWait();
         constructMultiGame();
@@ -149,7 +155,22 @@ public class main_ui extends Application {
     private void constructMulti1(){
         Label lb = new Label("Multiplayer");
         Button btnHost =new Button("Host Game");
-        btnHost.setOnAction(e ->{mainWindow.setScene(MultiWait);});
+        btnHost.setOnAction(e ->{
+            //szerver indítása
+            server_status = new Game_status();
+            Test_Server = new network_Server();
+            thread = new Thread(Test_Server);
+            thread.start();
+
+            while(!Test_Server.isRunning()){
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            mainWindow.setScene(MultiWaitGuest);
+        });
         btnHost.setStyle("-fx-background-color: SKYBLUE");
 
         Button btnGuest =new Button("Guest Game");
@@ -172,6 +193,20 @@ public class main_ui extends Application {
         Background background = new Background(background_fill);
         root.setBackground(background);
     }
+
+    private void constructMultiWaitGuest(){
+        Label lb = new Label("Waiting for the Guest");
+        if(Test_Server.isConnected()){
+            mainWindow.setScene(MultiWait);
+        }
+        BorderPane root = new BorderPane();
+        root.setCenter(lb);
+        MultiWaitGuest = new Scene(root, 600,600);
+        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(background_fill);
+        root.setBackground(background);
+    }
+
     private void constructMultiIP(){
         Label lb = new Label("Multiplayer");
         Button btnBack =new Button("Back");
