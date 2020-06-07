@@ -300,6 +300,7 @@ public class GameTimer {
         gc2.fillRect(0, 0, 900 , 600);
 
         if (!game.isSnakeAlive()) {
+            Game_statusLocal.Finished = true;
             gc1.setFill(Color.RED);
             gc1.setFont(new Font("", 50));
             gc1.fillText("GAME OVER", 300, 300);
