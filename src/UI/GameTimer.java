@@ -354,12 +354,14 @@ public class GameTimer {
         }else{
             gc1.setFill(Color.BLACK);
         }
+        gc1.setFont(new Font("", 10));
         gc1.fillText("Score: "+ game.getLabyrinth().getSnake().getPoints(), 10 ,10);
         if(labyrinthAnother.getType()==LabyrinthType.WALLED) {
             gc2.setFill(Color.WHITE);
         }else{
             gc2.setFill(Color.BLACK);
         }
+        gc2.setFont(new Font("", 10));
         gc2.fillText("Score: "+ labyrinthAnother.getSnake().getPoints(), 10 ,10);
 
         //kígyó kirajzolása
