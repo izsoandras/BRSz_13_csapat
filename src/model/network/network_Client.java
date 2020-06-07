@@ -194,8 +194,17 @@ public class network_Client extends network_core {
         // PROGRAM RUNNING
         while( Running ){
             try {
-
-                if(inputstream.ready() && !Opponentlabyrinth_updated && !OpponentStatus_updated) {
+                if(Opponent_labyrinth.Status.Exited || Local_labyrinth.Status.Exited){
+                    if(Opponent_labyrinth.Status.Exited){
+                        System.out.println("Opponent Left the game...");
+                    }
+                    if(Local_labyrinth.Status.Exited){
+                        System.out.println("You Left the game...");
+                    }
+                    Running = false;
+                    Local_labyrinth.Status.Exited = true;
+                }
+                if((inputstream.ready() && !Opponentlabyrinth_updated && !OpponentStatus_updated) || !Running) {
                     //System.out.println(" " + Reader.ready() + "\n");
 
                     Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
@@ -214,9 +223,6 @@ public class network_Client extends network_core {
                 Running = false;
                 Connected = false;
                 e.printStackTrace();
-            }
-            if(Opponent_labyrinth.Status.Exited || Local_labyrinth.Status.Exited){
-                Running = false;
             }
         }
 
