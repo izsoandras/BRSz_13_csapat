@@ -6,6 +6,7 @@ import model.map.Labyrinth;
 import model.map.LabyrinthMemento;
 
 import model.map.Labyrinth;
+import model.util.LabyrinthType;
 
 import java.net.Socket;
 
@@ -13,6 +14,7 @@ public class network_Server extends network_core {
     //Private variables
 
     protected ServerSocket Server_socket;
+    protected boolean Params_updated;
 
     //Public variables
 
@@ -43,7 +45,14 @@ public class network_Server extends network_core {
         Local_labyrinth.Labyrinth_data = new LabyrinthMemento(newlabyrinth);
         Local_labyrinth.Status = newstatus;
         Locallabyrinth_updated = true;
-        Sync_signal.doNotify();
+        Signal_lab_Update.doNotify();
+    }
+
+    public synchronized void UpdateServerParameters(LabyrinthType type, int speed){
+        LabType = type;
+        Gamespeed = speed;
+        Params_updated = true;
+        Signal_parameters_init.doNotify();
     }
 
     public void run(){
@@ -92,14 +101,16 @@ public class network_Server extends network_core {
         }
         //TO-DO GAMESETTINGS SENDING
 
-        while(!Locallabyrinth_updated){
-            Sync_signal.doWait();
+        while(!Params_updated){
+            Signal_parameters_init.doWait();
         }
 
         try {
-            //sending local labyrinth with game data to client
-            Obj_outputstream.writeObject(Local_labyrinth);
-            Locallabyrinth_updated = false;
+            //sending game data to client
+            Writer.println(LabType);
+            Writer.println(Gamespeed);
+            Params_updated = false;
+
             System.out.println("Labyrinth data provided for settings!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,7 +124,7 @@ public class network_Server extends network_core {
         while( Running ){
             //Wait for local labyrinth to get updated
             while(!Locallabyrinth_updated){
-                Sync_signal.doWait();
+                Signal_lab_Update.doWait();
             }
             //send local lab and receive client lab
             try {

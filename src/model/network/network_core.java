@@ -4,17 +4,20 @@ import java.net.Socket;
 import java.util.Timer;
 
 import model.map.Labyrinth;
+import model.util.LabyrinthType;
 
 
 public abstract class network_core implements Runnable{
     //Private variables
 
-    protected Updatesignal Sync_signal;
+    protected Updatesignal Signal_lab_Update, Signal_parameters_init;
     protected Socket GameSocket;
     protected network_labyrinth Local_labyrinth;
     protected network_labyrinth Opponent_labyrinth;
     protected Boolean Running;
     protected volatile Boolean Connected, Locallabyrinth_updated;
+    protected LabyrinthType LabType;
+    protected int Gamespeed;
     protected InputStreamReader inputstream;
     protected ObjectInputStream Obj_inputstream;
     protected OutputStream outputstream;
@@ -35,7 +38,8 @@ public abstract class network_core implements Runnable{
         Locallabyrinth_updated = false;
         Local_labyrinth = new network_labyrinth();
         Opponent_labyrinth = new network_labyrinth();
-        Sync_signal = new Updatesignal();
+        Signal_lab_Update = new Updatesignal();
+        Signal_parameters_init = new Updatesignal();
         //System.out.printf("Parent constructor run\n");
     }
 

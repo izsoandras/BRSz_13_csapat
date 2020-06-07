@@ -5,6 +5,8 @@ import model.util.LabyrinthType;
 
 import java.io.IOException;
 
+import static model.util.LabyrinthType.WALLED;
+
 
 public class Server_TEST {
     public static void main(String[] args) throws IOException {

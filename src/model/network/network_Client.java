@@ -4,6 +4,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import model.map.Labyrinth;
 import model.map.LabyrinthMemento;
+import model.util.LabyrinthType;
 
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -40,6 +41,13 @@ public class network_Client extends network_core {
 
     public boolean isOpponentlabUpdated(){
         return Opponentlabyrinth_updated;
+    }
+
+    public LabyrinthType getServerLabType(){
+        return LabType;
+    }
+    public int getGameSpeed(){
+        return Gamespeed;
     }
 
     @Override
@@ -123,7 +131,29 @@ public class network_Client extends network_core {
                 Thread.sleep(100);
             }
             if(Reader.ready()) {
-                Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
+                String temp_type = Reader.readLine();
+                //System.out.println(temp_type);
+                String temp_speed = Reader.readLine();
+                //System.out.println(temp_speed);
+                switch (temp_type) {
+                    case "WALLED":
+                        LabType = LabyrinthType.WALLED;
+                        break;
+                    case "EXTRA":
+                        LabType = LabyrinthType.EXTRA;
+                        break;
+                    default:
+                        LabType = LabyrinthType.WALLESS;
+                        break;
+                }
+
+                try {
+                    Gamespeed = Integer.parseInt(temp_speed);
+                }
+                catch (NumberFormatException e){
+                    Gamespeed = 5;
+                }
+
                 System.out.println("Labyrinth data accuired for settings!\n");
             }
         } catch (Exception e) {
