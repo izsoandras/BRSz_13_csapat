@@ -13,10 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.skin.TextInputControlSkin;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -24,6 +21,10 @@ import model.Game;
 import model.GameMemento;
 import model.map.Labyrinth;
 import model.map.things.Wall;
+import model.network.Game_status;
+import model.network.Server_TEST;
+import model.network.network_Client;
+import model.network.network_Server;
 import model.util.Directions;
 import model.util.LabyrinthType;
 
@@ -32,6 +33,7 @@ import java.io.*;
 
 public class GameTimer {
     private static Game game;
+    private static Labyrinth labyrinthAnother;
     private static int blocksize=10;
     private static boolean pause=false;
     private static AnimationTimer gameTimer;
@@ -61,12 +63,97 @@ public class GameTimer {
         root.setBackground(background);
     }
 
+    public  void MultiGame(LabyrinthType lab, int speed, network_Server Test_Server, network_Client Test_Client, boolean isServer){
+        Labyrinth labyrinth = new Labyrinth(lab);
+        game = new Game(labyrinth, speed);
+        labyrinthAnother = new Labyrinth(lab);
+
+        HBox root = new HBox();
+        Canvas c1 = new Canvas(90 * blocksize, 60 * blocksize);
+        Canvas c2 = new Canvas(90 * blocksize, 60 * blocksize);
+        GraphicsContext gc1 = c1.getGraphicsContext2D();
+        GraphicsContext gc2 = c2.getGraphicsContext2D();
+        root.getChildren().addAll(c1, c2);
+
+        gameTimer=new AnimationTimer() {
+            long lastTick = 0;
+
+
+            public void handle(long now) {
+                if (lastTick == 0) {
+                    lastTick = now;
+                    tickMulti(gc1, gc2, Test_Server,Test_Client,isServer);
+                    return;
+                }
+
+                if (now - lastTick > 1000000000 / game.getSpeed()) {
+                    lastTick = now;
+                    tickMulti(gc1,gc2,Test_Server, Test_Client, isServer);
+
+                }
+            }
+
+        };
+        if(game.isSnakeAlive()){
+            gameTimer.start();
+        }
+
+        Stage gameStage = new Stage();
+        Scene scene = new Scene(root, 1800, 600);
+        gameStage.setScene(scene);
+        gameStage.setTitle("Multi Game");
+        gameStage.show();
+
+        //controll
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+            if (key.getCode() == KeyCode.UP) {
+                game.getLabyrinth().getSnake().getHead().setDirection(Directions.UP);
+            }
+            if (key.getCode() == KeyCode.LEFT) {
+                game.getLabyrinth().getSnake().getHead().setDirection(Directions.LEFT);
+            }
+            if (key.getCode() == KeyCode.DOWN) {
+                game.getLabyrinth().getSnake().getHead().setDirection(Directions.DOWN);
+            }
+            if (key.getCode() == KeyCode.RIGHT) {
+                game.getLabyrinth().getSnake().getHead().setDirection(Directions.RIGHT);
+            }
+
+        });
+        //pause
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+            if (key.getCode() == KeyCode.P) {
+                if(!pause){
+                    pause=true;
+                }else {
+                    pause = false;
+                }
+            }
+        });
+
+        //exit
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+            if (key.getCode() == KeyCode.ESCAPE) {
+                Game_status temp = new Game_status();
+                temp.Exited = true;
+                if(isServer) {
+                    Test_Server.UpdateLocallabyrinth(labyrinth, temp);
+                }else{
+                    Test_Client.UpdateLocallabyrinth(labyrinth,temp);
+                }
+                gameStage.close();
+                gameTimer.stop();
+            }
+        });
+    }
+
 
     public void SingleGame(LabyrinthType lab, int speed) {
         Labyrinth labyrinth = new Labyrinth(lab);   //labirintus létrehozása beállítások alapján
         game = new Game(labyrinth, speed);     //Játék indítátasa beállítások alapján
         constructNameIn();
         Game(game);
+
     }
 
 
@@ -92,6 +179,7 @@ public class GameTimer {
         constructNameIn();
         Game(game);
     }
+
 
 
     private void Game(Game game){
@@ -193,6 +281,39 @@ public class GameTimer {
     }
 
 
+    public static void tickMulti(GraphicsContext gc1, GraphicsContext gc2, network_Server Test_Server, network_Client Test_Client, boolean isServer){
+        if (!game.isSnakeAlive()) {
+            gc1.setFill(Color.RED);
+            gc1.setFont(new Font("", 50));
+            gc1.fillText("GAME OVER", 300, 300);
+            gc1.fillText("Score: "+ game.getLabyrinth().getSnake().getPoints(), 350, 370);
+            return;
+        }
+        if(!pause) {
+            game.step();
+        }
+        //Network
+        if(isServer) {
+            labyrinthAnother = Test_Server.Get_Opponent_labyrinth();
+        }else{
+            labyrinthAnother = Test_Client.Get_Opponent_labyrinth();
+        }
+
+        //megjelenítés
+        //tábla törlés
+        gc1.setFill(Color.WHITE);
+        gc1.fillRect(0, 0, 900 , 600);
+        gc2.setFill(Color.WHITE);
+        gc2.fillRect(0, 0, 900 , 600);
+
+        //kaja kirajzolása
+        gc1.setFill(Color.RED);
+        gc1.fillOval(game.getLabyrinth().getFood().getField().getKoord().getX()* blocksize, game.getLabyrinth().getFood().getField().getKoord().getY() * blocksize, blocksize, blocksize);
+        gc2.setFill(Color.RED);
+        gc2.fillOval(labyrinthAnother.getFood().getField().getKoord().getX()* blocksize, labyrinthAnother.getFood().getField().getKoord().getY() * blocksize, blocksize, blocksize);
+
+
+    }
 
     public static void tick(GraphicsContext gc) {
 

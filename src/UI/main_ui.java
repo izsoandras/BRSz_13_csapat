@@ -285,7 +285,7 @@ public class main_ui extends Application {
         Button btnBack =new Button("Back");
         btnBack.setStyle("-fx-background-color: SALMON");
         btnBack.setOnAction(e ->{mainWindow.setScene(Menu);});
-        Label lb2 = new Label("If you ready press the button Server");
+        Label lb2 = new Label("If you ready press the button");
 
         Button btnReady =new Button("Ready");
         btnReady.setStyle("-fx-background-color: SKYBLUE");
@@ -300,7 +300,8 @@ public class main_ui extends Application {
                 }
             }
 
-            mainWindow.setScene(MultiGame);
+            mainWindow.setScene(Menu);
+            gt.MultiGame(lab, speed, Test_Server, Test_Client, true);
         });
 
         VBox vb = new VBox();
@@ -322,7 +323,7 @@ public class main_ui extends Application {
         Button btnBack =new Button("Back");
         btnBack.setStyle("-fx-background-color: SALMON");
         btnBack.setOnAction(e ->{mainWindow.setScene(Menu);});
-        Label lb2 = new Label("If you ready press the button Client");
+        Label lb2 = new Label("If you ready press the button");
 
         Button btnReady =new Button("Ready");
         btnReady.setStyle("-fx-background-color: SKYBLUE");
@@ -337,7 +338,8 @@ public class main_ui extends Application {
                 }
             }
 
-            mainWindow.setScene(MultiGame);
+            mainWindow.setScene(Menu);
+            gt.MultiGame(Test_Client.getServerLabType(), Test_Client.getGameSpeed(), Test_Server, Test_Client, false);
         });
 
         VBox vb = new VBox();
