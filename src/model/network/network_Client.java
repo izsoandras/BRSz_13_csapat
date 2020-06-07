@@ -14,6 +14,7 @@ public class network_Client extends network_core {
     private String IP_address;
     private boolean Server_invalid;
     private boolean Opponentlabyrinth_updated, OpponentStatus_updated;
+    private boolean Serverparams_available;
 
 
     //Public variables
@@ -28,6 +29,7 @@ public class network_Client extends network_core {
         Server_invalid = false;
         Opponentlabyrinth_updated = false;
         OpponentStatus_updated = false;
+        Serverparams_available = false;
     }
 
     public void set_clientIP(String IP_addr){
@@ -39,6 +41,10 @@ public class network_Client extends network_core {
         return Server_invalid;
     }
 
+    public boolean isParamsAvailable(){
+        return Serverparams_available;
+    }
+
     public boolean isOpponentlabUpdated(){
         return Opponentlabyrinth_updated;
     }
@@ -46,6 +52,7 @@ public class network_Client extends network_core {
     public LabyrinthType getServerLabType(){
         return LabType;
     }
+
     public int getGameSpeed(){
         return Gamespeed;
     }
@@ -78,6 +85,7 @@ public class network_Client extends network_core {
     public void run(){
         Running = true;
         Server_invalid = false;
+        Serverparams_available = false;
         String str;
         try {
             GameSocket = new Socket(IP_address, 22222);
@@ -101,7 +109,7 @@ public class network_Client extends network_core {
             Reader = new BufferedReader(inputstream);
 
             str = Reader.readLine();
-            Writer.println("Henlo\n");
+            Writer.println("Henlo");
             Writer.flush();
             if(!str.equals( "Henlo") ) {
                 System.out.println("Server not valid\n");
@@ -121,39 +129,36 @@ public class network_Client extends network_core {
             System.out.println("Network exited 2");
             return;
         }
-        if(Server_invalid){
-            System.out.println("Network exited 3");
-            return;
-        }
-        //Receive server labyrinth to get maze data
+        //Receive server game parameters
         try {
             while(!Reader.ready()){
                 Thread.sleep(100);
             }
             if(Reader.ready()) {
-                String temp_type = Reader.readLine();
-                //System.out.println(temp_type);
-                String temp_speed = Reader.readLine();
-                //System.out.println(temp_speed);
-                switch (temp_type) {
-                    case "WALLED":
+                String msg = Reader.readLine();
+                System.out.println("Received: " + msg);
+                String[] messageparts = msg.split("@");
+                switch (messageparts[0]) {
+                    case "1":
                         LabType = LabyrinthType.WALLED;
                         break;
-                    case "EXTRA":
+                    case "2":
                         LabType = LabyrinthType.EXTRA;
                         break;
                     default:
                         LabType = LabyrinthType.WALLESS;
                         break;
                 }
+                //System.out.println(messageparts[0] + " converted to: " + LabType);
 
                 try {
-                    Gamespeed = Integer.parseInt(temp_speed);
+                    Gamespeed = Integer.parseInt(messageparts[1]);
                 }
                 catch (NumberFormatException e){
                     Gamespeed = 5;
                 }
-
+                //System.out.println(messageparts[1] + " converted to: " + Gamespeed);
+                Serverparams_available = true;
                 System.out.println("Labyrinth data accuired for settings!\n");
             }
         } catch (Exception e) {
@@ -163,6 +168,8 @@ public class network_Client extends network_core {
             return;
         }
 
+
+        // PROGRAM RUNNING
         while( Running ){
             try {
                 if(inputstream.ready() && !Opponentlabyrinth_updated && !OpponentStatus_updated) {
