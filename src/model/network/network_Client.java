@@ -207,13 +207,13 @@ public class network_Client extends network_core {
 
                     Opponentlabyrinth_updated = true;
                     OpponentStatus_updated = true;
-
+                    /*
                     System.out.println(Local_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX() +
                             " and " + Local_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY() + " || " +
                             Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX() +
                             " and " + Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY());
+                     */
                     //System.out.println("Labyrinth updated!\n");
-                    System.out.println(Local_labyrinth.Status.Exited + " and " + Opponent_labyrinth.Status.Exited);
                     if (Local_labyrinth.Status.Exited || Opponent_labyrinth.Status.Exited) {
                         Running = false;
                         System.out.println("Network thread closed.");
