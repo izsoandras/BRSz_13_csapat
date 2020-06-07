@@ -3,46 +3,33 @@ package UI;
 import UI.toplist.Entry;
 import UI.toplist.TopList;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.network.Game_status;
-import model.network.Server_TEST;
 import model.network.network_Client;
 import model.network.network_Server;
 import model.util.LabyrinthType;
 
 
-import javax.imageio.IIOException;
-import java.io.*;
-import java.util.List;
-
-import static model.GameParams.LABYRINTH_HEIGHT;
-import static model.GameParams.LABYRINTH_WIDTH;
 
 public class main_ui extends Application {
     private Stage mainWindow;
-    private Scene Menu, Settings, Toplist, Game, Multi1, MultiIP, MultiWaitServer, MultiWaitClient, MultiGame, NameIn,MultiWaitGuest;
+    private Scene Menu, Settings, Toplist, Multi1, MultiIP, MultiWaitServer, MultiWaitClient,MultiWaitGuest;
     private int speed=5;
     private LabyrinthType lab = LabyrinthType.WALLESS;
     private String IP="192.168.0.27";
+    private TopList topList = new TopList();
 
     static int block_size = 10; //10pixel egy blokk mérete
     GameTimer gt= new GameTimer();
-    Game_status server_status= new Game_status();
     network_Server Test_Server= new network_Server();
     Thread threadNetwork;
-    Game_status client_status = new Game_status();
     network_Client Test_Client = new network_Client(IP);
     Thread threadClient;
 
@@ -52,7 +39,7 @@ public class main_ui extends Application {
 
         constructMenu();
         constructSettings();
-        constructToplist();
+       // constructToplist();
         constructMulti1();
         constructMultiWaitGuest();
         constructMultiIP();
@@ -90,7 +77,11 @@ public class main_ui extends Application {
         btnMulti.setStyle("-fx-background-color: SKYBLUE");
 
         Button btnToplist = new Button("Toplist");
-        btnToplist.setOnAction(e->{mainWindow.setScene(Toplist);});
+        btnToplist.setOnAction(e->{
+            constructToplist();
+            mainWindow.setScene(Toplist);
+
+        });
         btnToplist.setStyle("-fx-background-color: SKYBLUE");
 
         VBox root = new VBox();
@@ -143,31 +134,13 @@ public class main_ui extends Application {
         Button btnBack = new Button("Back");
         btnBack.setStyle("-fx-background-color: SALMON");
         btnBack.setOnAction(e->{mainWindow.setScene(Menu);});
-/*
-        TableView tableToplist=new TableView();
-        TableColumn name = new TableColumn("Name");
-        TableColumn point = new TableColumn("Points");
-        tableToplist.getColumns().addAll(name, point);
-        tableToplist.setMaxWidth(300);
-        name.setMinWidth(200);
-        point.setMinWidth(100);
-        ObservableList<String> data = FXCollections.observableArrayList();
-        TopList topList = new TopList();
-        for(Entry e : topList.getEntries()){
-            //System.out.println(e.getName()+": "+e.getPoints());
-            data.add(e.getName(), e.getPoints());
-        }
-        tableToplist.setItems(data);
 
-
-*/
         VBox vb=new VBox();
         Label lb2 = new Label("Toplista:");
         lb2.setFont(new Font("", 15));
         vb.getChildren().add(lb2);
-        TopList topList = new TopList();
+
         for(Entry e : topList.getEntries()){
-            //System.out.println(e.getName()+": "+e.getPoints());
             Label lb1 = new Label(e.getName()+": "+e.getPoints());
             lb1.setFont(new Font("", 15));
             vb.getChildren().add(lb1);
@@ -181,11 +154,8 @@ public class main_ui extends Application {
         BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(background_fill);
         root.setBackground(background);
-
-
-
-
     }
+
     private void constructMulti1(){
         Label lb = new Label("Multiplayer");
         Button btnHost =new Button("Host Game");
