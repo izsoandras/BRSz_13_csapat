@@ -130,12 +130,18 @@ public class GameTimer {
         //játék betöltése
         GameMemento gm=null;
         try {
-            FileInputStream fileIn = new FileInputStream("game.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            gm = (GameMemento) in.readObject();
-            in.close();
-            fileIn.close();
-            System.out.println("Játék betöltve");
+            File saveFile = new File("game.ser");
+            if(saveFile.isFile()) {
+                FileInputStream fileIn = new FileInputStream(saveFile);
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+                gm = (GameMemento) in.readObject();
+                in.close();
+                fileIn.close();
+                System.out.println("Játék betöltve");
+            }else{
+                //TODO: kiirni, hogy nincs mentes
+                return;
+            }
         } catch (IOException i) {
             System.out.println("hibára fut");
             i.printStackTrace();
