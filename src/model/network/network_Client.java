@@ -12,7 +12,7 @@ public class network_Client extends network_core {
     //Private variables
     private String IP_address;
     private boolean Server_invalid;
-    private boolean Opponentlabyrinth_updated;
+    private boolean Opponentlabyrinth_updated, OpponentStatus_updated;
 
 
     //Public variables
@@ -24,7 +24,9 @@ public class network_Client extends network_core {
     public network_Client(String IP_addr)  {
         super();
         set_clientIP(IP_addr);
-
+        Server_invalid = false;
+        Opponentlabyrinth_updated = false;
+        OpponentStatus_updated = false;
     }
 
     public void set_clientIP(String IP_addr){
@@ -42,8 +44,16 @@ public class network_Client extends network_core {
 
     @Override
     public Labyrinth Get_Opponent_labyrinth(){
+        Labyrinth temp = super.Get_Opponent_labyrinth();
         Opponentlabyrinth_updated = false;
-        return super.Get_Opponent_labyrinth();
+        return temp;
+    }
+    @Override
+    public Game_status Get_Opponent_Status(){
+        Game_status temp = super.Get_Opponent_Status();
+        OpponentStatus_updated = false;
+        return temp;
+
     }
 
 //    public void network_Client(String IP_addr, int portnum){
@@ -110,10 +120,12 @@ public class network_Client extends network_core {
 
         while( Running ){
             try {
-                if(inputstream.ready()) {
+                if(inputstream.ready() && !Opponentlabyrinth_updated && !OpponentStatus_updated) {
                     System.out.println(" " + Reader.ready() + "\n");
                     Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
                     Obj_outputstream.writeObject(Local_labyrinth);
+                    Opponentlabyrinth_updated = true;
+                    OpponentStatus_updated = true;
                     //System.out.printf("Labyrinth updated!\n");
                 }
             } catch (Exception e) {
