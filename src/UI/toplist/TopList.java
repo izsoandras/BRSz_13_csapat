@@ -25,16 +25,18 @@ public class TopList {
             i++;
         }
 
-        if(i < entries.size()){
-            entries.add(i,newEntry);
+        entries.add(i,newEntry);
+        return true;
+//        if(i < entries.size()){
+//            entries.add(i,newEntry);
 //            if(entries.size() > LIST_LENGTH) {
 //                entries.remove(entries.size() - 1);
 //            }
-            saveTopList();
-            return true;
-        }else{
-            return false;
-        }
+//            saveTopList();
+//            return true;
+//        }else{
+//            return false;
+//        }
     }
 
     public void reload(){
