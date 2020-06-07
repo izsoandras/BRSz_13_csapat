@@ -326,7 +326,7 @@ public class GameTimer {
         }
         if(labyrinthAnother.getDanger()!=null) {
             gc2.setFill(Color.YELLOW);
-            gc2.fillRect(game.getLabyrinth().getDanger().getField().getKoord().getX() * blocksize, labyrinthAnother.getDanger().getField().getKoord().getY() * blocksize, 10, 10);
+            gc2.fillRect(labyrinthAnother.getDanger().getField().getKoord().getX() * blocksize, labyrinthAnother.getDanger().getField().getKoord().getY() * blocksize, 10, 10);
         }
         //bónusz rajzolása
         if(game.getLabyrinth().getBonus()!=null) {
@@ -357,7 +357,7 @@ public class GameTimer {
             gc1.setFill(Color.BLACK);
         }
         gc1.fillText("Score: "+ game.getLabyrinth().getSnake().getPoints(), 10 ,10);
-        if(game.getLabyrinth().getType()==LabyrinthType.WALLED) {
+        if(labyrinthAnother.getType()==LabyrinthType.WALLED) {
             gc2.setFill(Color.WHITE);
         }else{
             gc2.setFill(Color.BLACK);
