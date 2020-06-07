@@ -32,7 +32,9 @@ public class SnakeBodyPart extends SnakePart {
         getField().removeThing();
         Field potentialNextField = previousSnakePart.getField();
         previousSnakePart.step();
-        potentialNextField.accept(this);
+        if(!potentialNextField.accept(this)){
+            getField().accept(this);
+        }
     }
 
     /** If the snake is hit by it's head, the snake dies.
