@@ -152,7 +152,7 @@ public class network_Client extends network_core {
                         LabType = LabyrinthType.WALLESS;
                         break;
                 }
-                //System.out.println(messageparts[0] + " converted to: " + LabType);
+                //System.out.println(messageparts[0] + " labtype converted to: " + LabType);
 
                 try {
                     Gamespeed = Integer.parseInt(messageparts[1]);
@@ -160,7 +160,7 @@ public class network_Client extends network_core {
                 catch (NumberFormatException e){
                     Gamespeed = 5;
                 }
-                //System.out.println(messageparts[1] + " converted to: " + Gamespeed);
+                //System.out.println(messageparts[1] + " speed converted to: " + Gamespeed);
                 Serverparams_available = true;
                 System.out.println("Labyrinth data accuired for settings!\n");
             }
@@ -195,7 +195,7 @@ public class network_Client extends network_core {
         while( Running ){
             try {
                 if(inputstream.ready() && !Opponentlabyrinth_updated && !OpponentStatus_updated) {
-                    System.out.println(" " + Reader.ready() + "\n");
+                    //System.out.println(" " + Reader.ready() + "\n");
                     Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
                     Obj_outputstream.writeObject(Local_labyrinth);
                     Opponentlabyrinth_updated = true;
