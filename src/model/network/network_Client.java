@@ -200,7 +200,7 @@ public class network_Client extends network_core {
                     Obj_outputstream.writeObject(Local_labyrinth);
                     Opponentlabyrinth_updated = true;
                     OpponentStatus_updated = true;
-                    System.out.printf("Labyrinth updated!\n");
+                    //System.out.printf("Labyrinth updated!\n");
                 }
             } catch (Exception e) {
                 Running = false;
