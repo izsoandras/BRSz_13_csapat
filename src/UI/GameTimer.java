@@ -36,7 +36,35 @@ public class GameTimer {
         Labyrinth labyrinth = new Labyrinth(lab);   //labirintus létrehozása beállítások alapján
         game = new Game(labyrinth, speed);     //Játék indítátasa beállítások alapján
 
+        Game(game);
+    }
 
+
+    public void LoadGame() {
+        //játék betöltése
+        GameMemento gm=null;
+        try {
+            FileInputStream fileIn = new FileInputStream("game.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            gm = (GameMemento) in.readObject();
+            in.close();
+            fileIn.close();
+            System.out.println("Game Loaded");
+        } catch (IOException i) {
+            i.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("Game class not found");
+            c.printStackTrace();
+            return;
+        }
+        game = new Game(gm);
+
+        Game(game);
+    }
+
+
+    private void Game(Game game){
         VBox root = new VBox();
         Canvas c = new Canvas(90 * blocksize, 60 * blocksize);
         GraphicsContext gc = c.getGraphicsContext2D();
@@ -119,127 +147,22 @@ public class GameTimer {
                     gameTimer.stop();
                 }else {
                     //kilépés
-                    gameStage.close();
-                    gameTimer.stop();
-
+                    //gameStage.setScene(Menu);
                     //TODO: nevet bekerni
                     TopList topList = new TopList();
                     topList.insert(new Entry("teszt",game.getLabyrinth().getSnake().getPoints()));
 
-                    return;
-                }
-            }
-        });
-    }
-    public void LoadGame() {
-        //játék betöltése
-        GameMemento gm=null;
-        try {
-            FileInputStream fileIn = new FileInputStream("game.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            gm = (GameMemento) in.readObject();
-            in.close();
-            fileIn.close();
-            System.out.println("Game Loaded");
-        } catch (IOException i) {
-            i.printStackTrace();
-            return;
-        } catch (ClassNotFoundException c) {
-            System.out.println("Game class not found");
-            c.printStackTrace();
-            return;
-        }
-        game = new Game(gm);
-
-        VBox root = new VBox();
-        Canvas c = new Canvas(90 * blocksize, 60 * blocksize);
-        GraphicsContext gc = c.getGraphicsContext2D();
-        root.getChildren().add(c);
-
-        gameTimer=new AnimationTimer() {
-            long lastTick = 0;
-
-
-            public void handle(long now) {
-                if (lastTick == 0) {
-                    lastTick = now;
-                    tick(gc);
-                    return;
-                }
-
-                if (now - lastTick > 1000000000 / game.getSpeed()) {
-                    lastTick = now;
-                    tick(gc);
-
-                }
-            }
-
-        };
-        if(game.isSnakeAlive()){
-            gameTimer.start();
-        }
-
-        Stage gameStage = new Stage();
-        Scene scene = new Scene(root, 900, 600);
-        gameStage.setScene(scene);
-        gameStage.setTitle("Single Game");
-        gameStage.show();
-
-        //controll
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            if (key.getCode() == KeyCode.UP) {
-                game.getLabyrinth().getSnake().getHead().setDirection(Directions.UP);
-            }
-            if (key.getCode() == KeyCode.LEFT) {
-                game.getLabyrinth().getSnake().getHead().setDirection(Directions.LEFT);
-            }
-            if (key.getCode() == KeyCode.DOWN) {
-                game.getLabyrinth().getSnake().getHead().setDirection(Directions.DOWN);
-            }
-            if (key.getCode() == KeyCode.RIGHT) {
-                game.getLabyrinth().getSnake().getHead().setDirection(Directions.RIGHT);
-            }
-
-        });
-        //pause
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            if (key.getCode() == KeyCode.P) {
-                if (!pause) {
-                    pause = true;
-                } else {
-                    pause = false;
-                }
-            }
-        });
-
-        //exit
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            if (key.getCode() == KeyCode.ESCAPE) {
-                if(game.isSnakeAlive()){
-                    //mentés és kilépés
-
-                    try {
-                        GameMemento m= new GameMemento(game);
-                        FileOutputStream fileOut = new FileOutputStream("game.ser");
-                        ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                        out.writeObject(m);
-                        out.close();
-                        fileOut.close();
-                        System.out.println("Game Saved");
-                    }catch (IOException i){
-                        i.printStackTrace();
-                    }
                     gameStage.close();
                     gameTimer.stop();
-                }else {
-                    //kilépés
-                    gameStage.close();
-                    gameTimer.stop();
+
                     return;
                 }
             }
         });
+
     }
+
+
 
     public static void tick(GraphicsContext gc) {
 

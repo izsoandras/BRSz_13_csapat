@@ -209,6 +209,8 @@ public class main_ui extends Application {
                     exx.printStackTrace();
                 }
             }
+            //TODO: komment
+            //Test_Server.UpdateServerParameters(lab, speed);     //labirint thype és int
             mainWindow.setScene(MultiWait);
         });
         btnConnect.setStyle("-fx-background-color: SKYBLUE");
@@ -234,12 +236,17 @@ public class main_ui extends Application {
 
         Label lb2 = new Label("Host IP címe:");
 
+        TextField textHostIP = new TextField();
+        textHostIP.setMaxWidth(120);
+        textHostIP.setStyle("-fx-background-color: SKYBLUE");
+
         Button btnConnect =new Button("Connect");
         btnConnect.setStyle("-fx-background-color: SKYBLUE");
         btnConnect.setOnAction(e ->{
+            IP=textHostIP.getText();
             //Client start
             Test_Client.set_clientIP(IP);
-            System.out.println("Connection IP: "+IP);
+            System.out.println("Connection IP: "+ IP);
             threadClient.start();
 
             while(!Test_Client.isConnected() && !Test_Client.isServerInvalid() ){
@@ -257,13 +264,6 @@ public class main_ui extends Application {
                 System.out.println("server invalid: " + Test_Client.isServerInvalid());
             }
         });
-
-        TextField textHostIP = new TextField();
-        textHostIP.setOnKeyPressed(e ->{if(e.getCode()== KeyCode.ENTER){
-            IP=textHostIP.getText();
-        }});
-        textHostIP.setMaxWidth(120);
-        textHostIP.setStyle("-fx-background-color: SKYBLUE");
 
         VBox vb = new VBox();
         vb.getChildren().addAll(lb2, textHostIP,btnConnect);
