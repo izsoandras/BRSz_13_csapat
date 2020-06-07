@@ -1,5 +1,7 @@
 package UI;
 
+import UI.toplist.Entry;
+import UI.toplist.TopList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -23,6 +25,10 @@ import model.GameMemento;
 import model.map.Labyrinth;
 import model.util.LabyrinthType;
 import UI.GameTimer;
+
+import javax.imageio.IIOException;
+import java.io.*;
+import java.util.List;
 
 import static model.GameParams.LABYRINTH_HEIGHT;
 import static model.GameParams.LABYRINTH_WIDTH;
@@ -159,6 +165,12 @@ public class main_ui extends Application {
         BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(background_fill);
         root.setBackground(background);
+
+        TopList topList = new TopList();
+        //TODO: kepernyore kiirni
+        for(Entry e : topList.getEntries()){
+            System.out.println(e.getName()+": "+e.getPoints());
+        }
     }
     private void constructMulti1(){
         Label lb = new Label("Multiplayer");
@@ -320,4 +332,5 @@ public class main_ui extends Application {
         System.out.println(lab);
         System.out.println(speed);
     }
+
 }

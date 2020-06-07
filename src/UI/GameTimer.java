@@ -1,5 +1,7 @@
 package UI;
 
+import UI.toplist.Entry;
+import UI.toplist.TopList;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -121,6 +123,11 @@ public class GameTimer {
                     System.out.println("escape dead");
                     gameStage.close();
                     gameTimer.stop();
+
+                    //TODO: nevet bekerni
+                    TopList topList = new TopList();
+                    topList.insert(new Entry("teszt",game.getLabyrinth().getSnake().getPoints()));
+
                     return;
                 }
             }
