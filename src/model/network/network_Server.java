@@ -24,9 +24,14 @@ public class network_Server extends network_core {
 
     //Public functions
 
-    public network_Server() throws IOException {
+    public network_Server(){
         super();
-        Server_socket = new ServerSocket( 22222 );
+        try {
+            Server_socket = new ServerSocket(22222);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
         //System.out.println("Child constr run\n");
     }
 

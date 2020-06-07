@@ -12,6 +12,8 @@ public class network_Client extends network_core {
     //Private variables
     private String IP_address;
     private boolean Server_invalid;
+    private boolean Opponentlabyrinth_updated;
+
 
     //Public variables
 
@@ -34,6 +36,16 @@ public class network_Client extends network_core {
         return Server_invalid;
     }
 
+    public boolean isOpponentlabUpdated(){
+        return Opponentlabyrinth_updated;
+    }
+
+    @Override
+    public Labyrinth Get_Opponent_labyrinth(){
+        Opponentlabyrinth_updated = false;
+        return super.Get_Opponent_labyrinth();
+    }
+
 //    public void network_Client(String IP_addr, int portnum){
 //        GameSocket = new Socket(IP_addr, portnum);
 //    }
@@ -43,6 +55,8 @@ public class network_Client extends network_core {
         //Locallabyrinth_updated = true;
         //Sync_signal.doNotify();
     }
+
+    //__________________________________________________________________________________________________________________
     public void run(){
         Running = true;
         Server_invalid = false;

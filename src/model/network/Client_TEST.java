@@ -26,7 +26,7 @@ public class Client_TEST {
 
         //___________________________________________________________________________________________________________________
 
-        while(!Test_Client.isConnected() ||Test_Client.isServerInvalid()){
+        while(!Test_Client.isConnected() ||Test_Client.isServerInvalid() ){
 
         }
 
