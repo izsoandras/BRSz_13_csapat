@@ -239,7 +239,7 @@ public class main_ui extends Application {
         btnConnect.setOnAction(e ->{
             //Client start
             Test_Client.set_clientIP(IP);
-            System.out.println(IP);
+            System.out.println("Connection IP: "+IP);
             threadClient.start();
 
             while(!Test_Client.isConnected() && Test_Client.isServerInvalid() ){
@@ -252,13 +252,15 @@ public class main_ui extends Application {
 
             if(Test_Client.isConnected()) {
                 mainWindow.setScene(MultiWait);
+            }else{
+                //threadClient stop
+                System.out.println("server invalid");
             }
         });
 
         TextField textHostIP = new TextField();
         textHostIP.setOnKeyPressed(e ->{if(e.getCode()== KeyCode.ENTER){
             IP=textHostIP.getText();
-            System.out.println(textHostIP.getText());
         }});
         textHostIP.setMaxWidth(120);
         textHostIP.setStyle("-fx-background-color: SKYBLUE");

@@ -116,6 +116,7 @@ public class network_Client extends network_core {
             Running = false;
             Connected = false;
             e.printStackTrace();
+            return;
         }
 
         while( Running ){
