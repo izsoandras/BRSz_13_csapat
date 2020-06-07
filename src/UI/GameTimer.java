@@ -293,25 +293,24 @@ public class GameTimer {
             Game_statusAnother=Test_Client.Get_Opponent_Status();
             Test_Client.UpdateLocallabyrinth(game.getLabyrinth(),Game_statusLocal);
         }
-
-        if (!game.isSnakeAlive()) {
-            gc1.setFill(Color.RED);
-            gc1.setFont(new Font("", 50));
-            gc1.fillText("GAME OVER", 300, 300);
-            gc1.fillText("Score: "+ game.getLabyrinth().getSnake().getPoints(), 350, 370);
-            return;
-        }
-        if(!pause) {
-            game.step();
-        }
-
-        //megjelenítés
         //tábla törlés
         gc1.setFill(Color.WHITE);
         gc1.fillRect(0, 0, 900 , 600);
         gc2.setFill(Color.WHITE);
         gc2.fillRect(0, 0, 900 , 600);
 
+        if (!game.isSnakeAlive()) {
+            gc1.setFill(Color.RED);
+            gc1.setFont(new Font("", 50));
+            gc1.fillText("GAME OVER", 300, 300);
+            gc1.fillText("Score: "+ game.getLabyrinth().getSnake().getPoints(), 350, 370);
+
+        }
+        if(!pause && game.isSnakeAlive()) {
+            game.step();
+        }
+
+        //megjelenítés
         //kaja kirajzolása
         gc1.setFill(Color.RED);
         gc1.fillOval(game.getLabyrinth().getFood().getField().getKoord().getX()* blocksize, game.getLabyrinth().getFood().getField().getKoord().getY() * blocksize, blocksize, blocksize);
