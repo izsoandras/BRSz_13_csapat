@@ -16,8 +16,7 @@ public class Client_TEST {
         Game_status client_status = new Game_status();
         network_Client Test_Client;
 
-        Test_Client = new network_Client("192.168.0.27");
-
+        Test_Client = new network_Client("192.168.0.21");
 
         Thread thread = new Thread(Test_Client);
         thread.start();
