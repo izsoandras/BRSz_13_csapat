@@ -11,7 +11,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.skin.TextInputControlSkin;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -21,15 +20,12 @@ import javafx.stage.Stage;
 import model.Game;
 import model.GameMemento;
 import model.map.Labyrinth;
-import model.map.things.Wall;
 import model.network.Game_status;
-import model.network.Server_TEST;
 import model.network.network_Client;
 import model.network.network_Server;
 import model.util.Directions;
 import model.util.LabyrinthType;
 
-import javax.swing.*;
 import java.io.*;
 
 public class GameTimer {
@@ -41,6 +37,39 @@ public class GameTimer {
     private static AnimationTimer gameTimer;
     private Scene NameIn;
     private Stage gameStage = new Stage();
+
+
+
+    public void SingleGame(LabyrinthType lab, int speed) {
+        Labyrinth labyrinth = new Labyrinth(lab);   //labirintus létrehozása beállítások alapján
+        game = new Game(labyrinth, speed);     //Játék indítátasa beállítások alapján
+        Game(game);
+        constructNameIn();
+    }
+
+
+    public void LoadGame() {
+        //játék betöltése
+        GameMemento gm=null;
+        try {
+            FileInputStream fileIn = new FileInputStream("game.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            gm = (GameMemento) in.readObject();
+            in.close();
+            fileIn.close();
+            System.out.println("Game Loaded");
+        } catch (IOException i) {
+            i.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("Game class not found");
+            c.printStackTrace();
+            return;
+        }
+        game = new Game(gm);
+        Game(game);
+        constructNameIn();
+    }
 
     private void constructNameIn(){
         Label lb = new Label("Your nick name:");
@@ -152,40 +181,6 @@ public class GameTimer {
             }
         });
     }
-
-
-    public void SingleGame(LabyrinthType lab, int speed) {
-        Labyrinth labyrinth = new Labyrinth(lab);   //labirintus létrehozása beállítások alapján
-        game = new Game(labyrinth, speed);     //Játék indítátasa beállítások alapján
-        Game(game);
-        constructNameIn();
-    }
-
-
-    public void LoadGame() {
-        //játék betöltése
-        GameMemento gm=null;
-        try {
-            FileInputStream fileIn = new FileInputStream("game.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            gm = (GameMemento) in.readObject();
-            in.close();
-            fileIn.close();
-            System.out.println("Game Loaded");
-        } catch (IOException i) {
-            i.printStackTrace();
-            return;
-        } catch (ClassNotFoundException c) {
-            System.out.println("Game class not found");
-            c.printStackTrace();
-            return;
-        }
-        game = new Game(gm);
-        Game(game);
-        constructNameIn();
-    }
-
-
 
     private void Game(Game game){
         VBox root = new VBox();
