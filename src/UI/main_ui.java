@@ -17,6 +17,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.network.Game_status;
+import model.network.Server_TEST;
 import model.network.network_Client;
 import model.network.network_Server;
 import model.util.LabyrinthType;
@@ -209,8 +210,7 @@ public class main_ui extends Application {
                     exx.printStackTrace();
                 }
             }
-            //TODO: komment
-            //Test_Server.UpdateServerParameters(lab, speed);     //labirint thype és int
+            Test_Server.UpdateServerParameters(lab, speed);     //labirint thype és int
             mainWindow.setScene(MultiWait);
         });
         btnConnect.setStyle("-fx-background-color: SKYBLUE");
@@ -288,7 +288,19 @@ public class main_ui extends Application {
 
         Button btnReady =new Button("Ready");
         btnReady.setStyle("-fx-background-color: SKYBLUE");
-        btnReady.setOnAction(e ->{mainWindow.setScene(MultiGame);});
+        btnReady.setOnAction(e ->{
+            Test_Server.setLocalReady();
+
+            while(!Test_Server.getOpponentReady()){
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException eex) {
+                    eex.printStackTrace();
+                }
+            }
+
+            mainWindow.setScene(MultiGame);
+        });
 
         VBox vb = new VBox();
         vb.getChildren().addAll(lb2, btnReady);

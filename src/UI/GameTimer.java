@@ -3,13 +3,19 @@ package UI;
 import UI.toplist.Entry;
 import UI.toplist.TopList;
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.skin.TextInputControlSkin;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -29,13 +35,38 @@ public class GameTimer {
     private static int blocksize=10;
     private static boolean pause=false;
     private static AnimationTimer gameTimer;
+    private Scene NameIn;
+
+    private void constructNameIn(){
+        Label lb = new Label("Your nick name:");
+
+        TextField textName = new TextField();
+
+        Button btnSubmit =new Button("Submit");
+        btnSubmit.setOnAction(e ->{
+            //TODO: mentés és kilépés
+
+            TopList topList = new TopList();
+            topList.insert(new Entry(textName.getText() ,game.getLabyrinth().getSnake().getPoints()));
+
+        });
+
+
+
+        VBox root = new VBox();
+        root.getChildren().addAll(lb, textName, btnSubmit);
+        NameIn = new Scene(root, 600, 600);
+        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(background_fill);
+        root.setBackground(background);
+    }
 
 
 
     public void SingleGame(LabyrinthType lab, int speed) {
         Labyrinth labyrinth = new Labyrinth(lab);   //labirintus létrehozása beállítások alapján
         game = new Game(labyrinth, speed);     //Játék indítátasa beállítások alapján
-
+        constructNameIn();
         Game(game);
     }
 
@@ -59,7 +90,7 @@ public class GameTimer {
             return;
         }
         game = new Game(gm);
-
+        constructNameIn();
         Game(game);
     }
 
