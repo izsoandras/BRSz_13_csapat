@@ -166,11 +166,7 @@ public class network_Server extends network_core {
             while(!Locallabyrinth_updated){
                 Signal_lab_Update.doWait();
             }
-            //if either guy exits game is over
-            if(Opponent_labyrinth.Status.Exited || Local_labyrinth.Status.Exited){
-                Running = false;
-                Local_labyrinth.Status.Exited = true;
-            }
+
             //send local lab and receive client lab
             try {
                 Obj_outputstream.writeObject(Local_labyrinth);
@@ -186,7 +182,10 @@ public class network_Server extends network_core {
                 Connected = false;
                 return;
             }
-
+            //if both guys exits game is over
+            if(Opponent_labyrinth.Status.Exited && Local_labyrinth.Status.Exited){
+                Running = false;
+            }
         }
 
         Running = false;
