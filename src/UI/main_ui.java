@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.network.Game_status;
 import model.network.Server_TEST;
@@ -160,19 +161,27 @@ public class main_ui extends Application {
 
 
 */
+        VBox vb=new VBox();
+        Label lb2 = new Label("Toplista:");
+        lb2.setFont(new Font("", 15));
+        vb.getChildren().add(lb2);
+        TopList topList = new TopList();
+        for(Entry e : topList.getEntries()){
+            //System.out.println(e.getName()+": "+e.getPoints());
+            Label lb1 = new Label(e.getName()+": "+e.getPoints());
+            lb1.setFont(new Font("", 15));
+            vb.getChildren().add(lb1);
+        }
+        vb.setSpacing(2);
+        vb.setAlignment(Pos.CENTER);
         BorderPane root = new BorderPane();
         root.setTop(btnBack);
-        //root.setCenter(tableToplist);
+        root.setCenter(vb);
         Toplist = new Scene(root, 600,600);
         BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(background_fill);
         root.setBackground(background);
 
-        TopList topList = new TopList();
-        //TODO: kepernyore kiirni
-        for(Entry e : topList.getEntries()){
-            System.out.println(e.getName()+": "+e.getPoints());
-        }
 
 
 
