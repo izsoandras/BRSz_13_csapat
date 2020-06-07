@@ -62,7 +62,6 @@ public class GameTimer {
     }
 
 
-
     public void SingleGame(LabyrinthType lab, int speed) {
         Labyrinth labyrinth = new Labyrinth(lab);   //labirintus létrehozása beállítások alapján
         game = new Game(labyrinth, speed);     //Játék indítátasa beállítások alapján

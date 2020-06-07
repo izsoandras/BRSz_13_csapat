@@ -32,7 +32,7 @@ import static model.GameParams.LABYRINTH_WIDTH;
 
 public class main_ui extends Application {
     private Stage mainWindow;
-    private Scene Menu, Settings, Toplist, Game, Multi1, MultiIP, MultiWait, MultiGame, NameIn,MultiWaitGuest;
+    private Scene Menu, Settings, Toplist, Game, Multi1, MultiIP, MultiWaitServer, MultiWaitClient, MultiGame, NameIn,MultiWaitGuest;
     private int speed=5;
     private LabyrinthType lab = LabyrinthType.WALLESS;
     private String IP="192.168.0.27";
@@ -56,7 +56,8 @@ public class main_ui extends Application {
         constructMulti1();
         constructMultiWaitGuest();
         constructMultiIP();
-        constructMultiWait();
+        constructMultiWaitServer();
+        constructMultiWaitClient();
         constructMultiGame();
         constructNameIn();
 
@@ -211,7 +212,7 @@ public class main_ui extends Application {
                 }
             }
             Test_Server.UpdateServerParameters(lab, speed);     //labirint thype és int
-            mainWindow.setScene(MultiWait);
+            mainWindow.setScene(MultiWaitServer);
         });
         btnConnect.setStyle("-fx-background-color: SKYBLUE");
 
@@ -258,7 +259,7 @@ public class main_ui extends Application {
             }
 
             if(Test_Client.isConnected()) {
-                mainWindow.setScene(MultiWait);
+                mainWindow.setScene(MultiWaitClient);
             }else{
                 //threadClient stop
                 System.out.println("server invalid: " + Test_Client.isServerInvalid());
@@ -279,12 +280,12 @@ public class main_ui extends Application {
         Background background = new Background(background_fill);
         root.setBackground(background);
     }
-    private void constructMultiWait(){
+    private void constructMultiWaitServer(){
         Label lb = new Label("Multiplayer");
         Button btnBack =new Button("Back");
         btnBack.setStyle("-fx-background-color: SALMON");
         btnBack.setOnAction(e ->{mainWindow.setScene(Menu);});
-        Label lb2 = new Label("If you ready press the button");
+        Label lb2 = new Label("If you ready press the button Server");
 
         Button btnReady =new Button("Ready");
         btnReady.setStyle("-fx-background-color: SKYBLUE");
@@ -310,11 +311,49 @@ public class main_ui extends Application {
         root.setTop(btnBack);
         root.setCenter(vb);
 
-        MultiWait = new Scene(root, 600, 600);
+        MultiWaitServer = new Scene(root, 600, 600);
         BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(background_fill);
         root.setBackground(background);
     }
+
+    private void constructMultiWaitClient(){
+        Label lb = new Label("Multiplayer");
+        Button btnBack =new Button("Back");
+        btnBack.setStyle("-fx-background-color: SALMON");
+        btnBack.setOnAction(e ->{mainWindow.setScene(Menu);});
+        Label lb2 = new Label("If you ready press the button Client");
+
+        Button btnReady =new Button("Ready");
+        btnReady.setStyle("-fx-background-color: SKYBLUE");
+        btnReady.setOnAction(e ->{
+            Test_Client.setLocalReady();
+
+            while(!Test_Client.getOpponentReady()){
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException eex) {
+                    eex.printStackTrace();
+                }
+            }
+
+            mainWindow.setScene(MultiGame);
+        });
+
+        VBox vb = new VBox();
+        vb.getChildren().addAll(lb2, btnReady);
+        vb.setAlignment(Pos.CENTER);
+        vb.setSpacing(20);
+        BorderPane root = new BorderPane();
+        root.setTop(btnBack);
+        root.setCenter(vb);
+
+        MultiWaitClient = new Scene(root, 600, 600);
+        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(background_fill);
+        root.setBackground(background);
+    }
+
     private void constructMultiGame(){      //újra kell írni
         Label lb = new Label("Multi Game");
         Label Score = new Label("Score: ");      //játék állása kell
