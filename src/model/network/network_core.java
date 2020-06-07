@@ -12,8 +12,7 @@ public abstract class network_core implements Runnable{
 
     protected Updatesignal Signal_lab_Update, Signal_parameters_init;
     protected Socket GameSocket;
-    protected network_labyrinth Local_labyrinth;
-    protected network_labyrinth Opponent_labyrinth;
+    protected volatile network_labyrinth Local_labyrinth, Opponent_labyrinth;
     protected Boolean Running;
     protected volatile Boolean Connected, Locallabyrinth_updated, Opponent_Ready, Local_Ready;
     protected LabyrinthType LabType;

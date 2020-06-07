@@ -197,10 +197,13 @@ public class network_Client extends network_core {
 
                 if(inputstream.ready() && !Opponentlabyrinth_updated && !OpponentStatus_updated) {
                     //System.out.println(" " + Reader.ready() + "\n");
+
                     Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
                     Obj_outputstream.writeObject(Local_labyrinth);
+
                     Opponentlabyrinth_updated = true;
                     OpponentStatus_updated = true;
+
                     System.out.println(Local_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX() +
                             " and " + Local_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY() + " || " +
                             Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX() +
