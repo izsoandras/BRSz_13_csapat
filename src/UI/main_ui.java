@@ -3,15 +3,14 @@ package UI;
 import UI.toplist.Entry;
 import UI.toplist.TopList;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -58,8 +57,7 @@ public class main_ui extends Application {
         constructMultiIP();
         constructMultiWaitServer();
         constructMultiWaitClient();
-        constructMultiGame();
-        constructNameIn();
+
 
         mainWindow.setScene(Menu);
         mainWindow.setTitle("Snake Game");
@@ -144,10 +142,27 @@ public class main_ui extends Application {
         Button btnBack = new Button("Back");
         btnBack.setStyle("-fx-background-color: SALMON");
         btnBack.setOnAction(e->{mainWindow.setScene(Menu);});
+/*
+        TableView tableToplist=new TableView();
+        TableColumn name = new TableColumn("Name");
+        TableColumn point = new TableColumn("Points");
+        tableToplist.getColumns().addAll(name, point);
+        tableToplist.setMaxWidth(300);
+        name.setMinWidth(200);
+        point.setMinWidth(100);
+        ObservableList<String> data = FXCollections.observableArrayList();
+        TopList topList = new TopList();
+        for(Entry e : topList.getEntries()){
+            //System.out.println(e.getName()+": "+e.getPoints());
+            data.add(e.getName(), e.getPoints());
+        }
+        tableToplist.setItems(data);
 
+
+*/
         BorderPane root = new BorderPane();
         root.setTop(btnBack);
-        root.setCenter(lb);
+        //root.setCenter(tableToplist);
         Toplist = new Scene(root, 600,600);
         BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(background_fill);
@@ -158,6 +173,9 @@ public class main_ui extends Application {
         for(Entry e : topList.getEntries()){
             System.out.println(e.getName()+": "+e.getPoints());
         }
+
+
+
     }
     private void constructMulti1(){
         Label lb = new Label("Multiplayer");
@@ -358,58 +376,6 @@ public class main_ui extends Application {
         root.setCenter(vb);
 
         MultiWaitClient = new Scene(root, 600, 600);
-        BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
-        Background background = new Background(background_fill);
-        root.setBackground(background);
-    }
-
-    private void constructMultiGame(){      //újra kell írni
-        Label lb = new Label("Multi Game");
-        Label Score = new Label("Score: ");      //játék állása kell
-
-
-        Button btnBack = new Button("Back");    //játékot el kell menteni
-        btnBack.setOnAction(e->{mainWindow.setScene(Menu);});
-
-
-        VBox root = new VBox();
-        root.getChildren().addAll(lb, Score, btnBack);
-        MultiGame = new Scene(root, 600,600);
-        Canvas c = new Canvas(LABYRINTH_WIDTH*block_size, LABYRINTH_HEIGHT*block_size);
-        GraphicsContext gc = c.getGraphicsContext2D();
-        root.getChildren().add(c);
-/*  Ezt még ki kell találni
-        new AnimationTimer() {
-            long lastTick = 0;
-
-            public void handle(long now) {
-                if (lastTick == 0) {
-                    lastTick = now;
-                    tick(gc);
-                    return;
-                }
-
-                if (now - lastTick > 1000000000 / 5 ) {  //speed=5  game.getSpeed()
-                    lastTick = now;
-                    tick(gc);
-                }
-            }
-
-        }.start();
-*/
-    }
-
-    private void constructNameIn(){
-        Label lb = new Label("Top 10 name");
-        Button btnSubmit =new Button("Submit");
-        btnSubmit.setOnAction(e ->{mainWindow.setScene(Menu);});
-
-        TextField textName = new TextField();
-        textName.setOnKeyPressed(e ->{if(e.getCode()== KeyCode.ENTER){System.out.println(textName.getText());}});
-
-        VBox root = new VBox();
-        root.getChildren().addAll(lb, textName, btnSubmit);
-        NameIn = new Scene(root, 600, 600);
         BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(background_fill);
         root.setBackground(background);

@@ -4,6 +4,7 @@ import UI.toplist.Entry;
 import UI.toplist.TopList;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -39,24 +40,26 @@ public class GameTimer {
     private static boolean pause=false;
     private static AnimationTimer gameTimer;
     private Scene NameIn;
+    private Stage gameStage = new Stage();
 
     private void constructNameIn(){
         Label lb = new Label("Your nick name:");
 
         TextField textName = new TextField();
+        textName.setMaxWidth(100);
+        textName.setStyle("-fx-background-color: SKYBLUE");
 
         Button btnSubmit =new Button("Submit");
+        btnSubmit.setStyle("-fx-background-color: SKYBLUE");
         btnSubmit.setOnAction(e ->{
-            //TODO: mentés és kilépés
-
             TopList topList = new TopList();
             topList.insert(new Entry(textName.getText() ,game.getLabyrinth().getSnake().getPoints()));
-
+            gameStage.close();
         });
 
-
-
         VBox root = new VBox();
+        root.setAlignment(Pos.CENTER);
+        root.setSpacing(20);
         root.getChildren().addAll(lb, textName, btnSubmit);
         NameIn = new Scene(root, 600, 600);
         BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
@@ -154,9 +157,8 @@ public class GameTimer {
     public void SingleGame(LabyrinthType lab, int speed) {
         Labyrinth labyrinth = new Labyrinth(lab);   //labirintus létrehozása beállítások alapján
         game = new Game(labyrinth, speed);     //Játék indítátasa beállítások alapján
-        constructNameIn();
         Game(game);
-
+        constructNameIn();
     }
 
 
@@ -179,8 +181,8 @@ public class GameTimer {
             return;
         }
         game = new Game(gm);
-        constructNameIn();
         Game(game);
+        constructNameIn();
     }
 
 
@@ -214,7 +216,7 @@ public class GameTimer {
             gameTimer.start();
         }
 
-        Stage gameStage = new Stage();
+
         Scene scene = new Scene(root, 900, 600);
         gameStage.setScene(scene);
         gameStage.setTitle("Single Game");
@@ -264,18 +266,14 @@ public class GameTimer {
                     }catch (IOException i){
                         i.printStackTrace();
                     }
-                    gameStage.close();
                     gameTimer.stop();
+                    gameStage.close();
                 }else {
-                    //kilépés
-                    //gameStage.setScene(Menu);
-                    //TODO: nevet bekerni
-                    TopList topList = new TopList();
-                    topList.insert(new Entry("teszt",game.getLabyrinth().getSnake().getPoints()));
-
-                    gameStage.close();
+                    //név mentése és kilépés
+                    gameStage.setScene(NameIn);
                     gameTimer.stop();
-
+                    if(game.getLabyrinth().getSnake().getPoints()==0)
+                        gameStage.close();
                     return;
                 }
             }
@@ -285,16 +283,6 @@ public class GameTimer {
 
 
     public static void tickMulti(GraphicsContext gc1, GraphicsContext gc2, network_Server Test_Server, network_Client Test_Client, boolean isServer){
-        if (!game.isSnakeAlive()) {
-            gc1.setFill(Color.RED);
-            gc1.setFont(new Font("", 50));
-            gc1.fillText("GAME OVER", 300, 300);
-            gc1.fillText("Score: "+ game.getLabyrinth().getSnake().getPoints(), 350, 370);
-            return;
-        }
-        if(!pause) {
-            game.step();
-        }
         //Network
         if(isServer) {
             labyrinthAnother = Test_Server.Get_Opponent_labyrinth();
@@ -304,6 +292,17 @@ public class GameTimer {
             labyrinthAnother = Test_Client.Get_Opponent_labyrinth();
             Game_statusAnother=Test_Client.Get_Opponent_Status();
             Test_Client.UpdateLocallabyrinth(game.getLabyrinth(),Game_statusLocal);
+        }
+
+        if (!game.isSnakeAlive()) {
+            gc1.setFill(Color.RED);
+            gc1.setFont(new Font("", 50));
+            gc1.fillText("GAME OVER", 300, 300);
+            gc1.fillText("Score: "+ game.getLabyrinth().getSnake().getPoints(), 350, 370);
+            return;
+        }
+        if(!pause) {
+            game.step();
         }
 
         //megjelenítés
