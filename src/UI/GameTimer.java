@@ -306,6 +306,7 @@ public class GameTimer {
             gc1.fillText("Score: "+ game.getLabyrinth().getSnake().getPoints(), 350, 370);
 
         }
+
         if(!pause && game.isSnakeAlive()) {
             game.step();
         }

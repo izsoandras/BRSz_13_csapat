@@ -174,12 +174,12 @@ public class network_Server extends network_core {
                 Obj_outputstream.flush();
                 Obj_outputstream.reset();
                 Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
-
+                /*
                 System.out.println(Local_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX() +
                                             "      " + Local_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY() + " || " +
                                     Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX() +
                                     "      " + Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY());
-                System.out.println(Opponent_labyrinth.Status.Exited + " and " + Local_labyrinth.Status.Exited);
+                */
 
                 Locallabyrinth_updated = false;
             } catch (Exception e) {
