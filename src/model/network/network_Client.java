@@ -101,6 +101,7 @@ public class network_Client extends network_core {
             Connected = false;
             Server_invalid = true;
             e.printStackTrace();
+            return;
         }
 
         //Receive server labyrinth to get maze data
@@ -116,6 +117,7 @@ public class network_Client extends network_core {
             Running = false;
             Connected = false;
             e.printStackTrace();
+            return;
         }
 
         while( Running ){
