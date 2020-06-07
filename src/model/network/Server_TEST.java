@@ -9,9 +9,12 @@ import java.io.IOException;
 public class Server_TEST {
     public static void main(String[] args) throws IOException {
         Labyrinth server_lab = new Labyrinth(LabyrinthType.WALLESS);
+
+        //___________________________________________________________________________________________________________________
+
+        //___________________________________________________________________________________________________________________
         Game_status server_status = new Game_status();
-        network_Server Test_Server;
-        Test_Server = new network_Server();
+        network_Server Test_Server = new network_Server();
 
         Thread thread = new Thread(Test_Server);
         thread.start();
@@ -23,6 +26,9 @@ public class Server_TEST {
                 e.printStackTrace();
             }
         }
+        //___________________________________________________________________________________________________________________
+
+        //___________________________________________________________________________________________________________________
         //System.out.printf("Server running!\n");
         while(!Test_Server.isConnected()){
             try {
@@ -35,6 +41,9 @@ public class Server_TEST {
         Test_Server.UpdateLocallabyrinth(server_lab, server_status);
 
 
+        //___________________________________________________________________________________________________________________
+
+        //___________________________________________________________________________________________________________________
         //System.out.printf("%b",Test_Server.isRunning());
         while(Test_Server.isRunning()){
             try {
@@ -43,6 +52,8 @@ public class Server_TEST {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            //Test_lab = Test_Server.Get_Opponent_labyrinth();
+            //Test_lab.getOpponentStatus();
             Test_Server.UpdateLocallabyrinth(server_lab, server_status);
             System.out.println("Local_labyrinth sent!\n");
 

@@ -11,6 +11,7 @@ import java.net.SocketAddress;
 public class network_Client extends network_core {
     //Private variables
     private String IP_address;
+    private boolean Server_invalid;
 
     //Public variables
 
@@ -20,9 +21,19 @@ public class network_Client extends network_core {
 
     public network_Client(String IP_addr)  {
         super();
-        IP_address = IP_addr;
+        set_clientIP(IP_addr);
 
     }
+
+    public void set_clientIP(String IP_addr){
+        Server_invalid = false;
+        IP_address = IP_addr;
+    }
+
+    public boolean isServerInvalid(){
+        return Server_invalid;
+    }
+
 //    public void network_Client(String IP_addr, int portnum){
 //        GameSocket = new Socket(IP_addr, portnum);
 //    }
@@ -34,6 +45,7 @@ public class network_Client extends network_core {
     }
     public void run(){
         Running = true;
+        Server_invalid = false;
         String str;
         try {
             GameSocket = new Socket(IP_address, 22222);
@@ -53,6 +65,7 @@ public class network_Client extends network_core {
             if(!str.equals( "Henlo") ) {
                 System.out.println("Server not valid\n");
                 Running = false;
+                Server_invalid = true;
                 return;
             }else{
                 System.out.println("Server validated successfully\n");
@@ -62,8 +75,10 @@ public class network_Client extends network_core {
         } catch (IOException e) {
             Running = false;
             Connected = false;
+            Server_invalid = true;
             e.printStackTrace();
         }
+
         //Receive server labyrinth to get maze data
         try {
             while(!Reader.ready()){
