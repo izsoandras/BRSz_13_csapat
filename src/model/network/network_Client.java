@@ -73,6 +73,15 @@ public class network_Client extends network_core {
         String str;
         try {
             GameSocket = new Socket(IP_address, 22222);
+        } catch (IOException e) {
+            Running = false;
+            Connected = false;
+            Server_invalid = true;
+            //e.printStackTrace();
+            System.out.println("Network exited 1");
+            return;
+        }
+        try{
             //STREAMS
             //Outputs
             Obj_outputstream = new ObjectOutputStream(GameSocket.getOutputStream());
@@ -101,9 +110,13 @@ public class network_Client extends network_core {
             Connected = false;
             Server_invalid = true;
             //e.printStackTrace();
+            System.out.println("Network exited 2");
             return;
         }
-
+        if(Server_invalid){
+            System.out.println("Network exited 3");
+            return;
+        }
         //Receive server labyrinth to get maze data
         try {
             while(!Reader.ready()){

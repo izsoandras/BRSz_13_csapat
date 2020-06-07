@@ -242,7 +242,7 @@ public class main_ui extends Application {
             System.out.println("Connection IP: "+IP);
             threadClient.start();
 
-            while(!Test_Client.isConnected() && Test_Client.isServerInvalid() ){
+            while(!Test_Client.isConnected() && !Test_Client.isServerInvalid() ){
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException exxx) {
@@ -254,7 +254,7 @@ public class main_ui extends Application {
                 mainWindow.setScene(MultiWait);
             }else{
                 //threadClient stop
-                System.out.println("server invalid");
+                System.out.println("server invalid: " + Test_Client.isServerInvalid());
             }
         });
 
