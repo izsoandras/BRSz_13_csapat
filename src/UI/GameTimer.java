@@ -64,9 +64,13 @@ public class GameTimer {
     }
 
     public  void MultiGame(LabyrinthType lab, int speed, network_Server Test_Server, network_Client Test_Client, boolean isServer){
+        System.out.println("Test : 1");
         Labyrinth labyrinth = new Labyrinth(lab);
+        System.out.println("Test : 2");
         game = new Game(labyrinth, speed);
+        System.out.println("Test : 3");
         labyrinthAnother = new Labyrinth(lab);
+        System.out.println("Test : 4");
 
         HBox root = new HBox();
         Canvas c1 = new Canvas(90 * blocksize, 60 * blocksize);
