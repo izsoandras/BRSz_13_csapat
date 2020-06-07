@@ -376,7 +376,7 @@ public class GameTimer {
         //feje
         gc2.fillRect(labyrinthAnother.getSnake().getHead().getField().getKoord().getX()* blocksize,labyrinthAnother.getSnake().getHead().getField().getKoord().getY()* blocksize, 10, 10);
         //teste
-        for (int i = 0; i < game.getLabyrinth().getSnake().getBody().size(); i++) {
+        for (int i = 0; i < labyrinthAnother.getSnake().getBody().size(); i++) {
             gc2.fillRect(labyrinthAnother.getSnake().getBody().get(i).getField().getKoord().getX()*blocksize, labyrinthAnother.getSnake().getBody().get(i).getField().getKoord().getY() * blocksize, 10, 10);
         }
     }
