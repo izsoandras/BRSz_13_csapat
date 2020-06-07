@@ -1,5 +1,7 @@
 package UI;
 
+import UI.toplist.Entry;
+import UI.toplist.TopList;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,6 +18,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.util.LabyrinthType;
 
+
+import javax.imageio.IIOException;
+import java.io.*;
+import java.util.List;
 
 import static model.GameParams.LABYRINTH_HEIGHT;
 import static model.GameParams.LABYRINTH_WIDTH;
@@ -133,6 +139,12 @@ public class main_ui extends Application {
         BackgroundFill background_fill = new BackgroundFill(Color.TAN, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(background_fill);
         root.setBackground(background);
+
+        TopList topList = new TopList();
+        //TODO: kepernyore kiirni
+        for(Entry e : topList.getEntries()){
+            System.out.println(e.getName()+": "+e.getPoints());
+        }
     }
     private void constructMulti1(){
         Label lb = new Label("Multiplayer");

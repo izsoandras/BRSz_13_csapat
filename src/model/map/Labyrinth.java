@@ -195,12 +195,15 @@ public class Labyrinth implements Steppable {
         return  emptyFields;
     }
 
+    /** Builds the appropriate labyrinth and places snake.
+     * */
     private void createInhabitedLabyrinth(){
         createEmptyLabyrinth();
         placeSnake();
     }
 
-
+    /** Builds the appropriate labyrinth based on type.
+     * */
     private void createEmptyLabyrinth(){
         switch (type){
             case WALLESS:{
@@ -215,6 +218,8 @@ public class Labyrinth implements Steppable {
         }
     }
 
+    /** Puts the snake to the appropriate start location based on type.
+     * */
     private void placeSnake(){
         switch (type){
             case WALLESS:
