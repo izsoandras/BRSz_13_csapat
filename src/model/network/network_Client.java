@@ -83,7 +83,10 @@ public class network_Client extends network_core {
 
     //__________________________________________________________________________________________________________________
     public void run(){
+        String readymsg = "Initvalue";
         Running = true;
+        Local_Ready = false;
+        Opponent_Ready = false;
         Server_invalid = false;
         Serverparams_available = false;
         String str;
@@ -167,7 +170,24 @@ public class network_Client extends network_core {
             e.printStackTrace();
             return;
         }
-
+        //READY
+        try {
+            while(!readymsg.equals("Ready")){
+                readymsg = Reader.readLine();
+            }
+            Opponent_Ready = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while(!Local_Ready) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        Writer.println("Ready");
+        Writer.flush();
 
         // PROGRAM RUNNING
         while( Running ){

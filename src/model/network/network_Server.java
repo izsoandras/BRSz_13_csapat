@@ -58,6 +58,9 @@ public class network_Server extends network_core {
     public void run(){
         Running = true;
         String msg;
+        String readymsg = "Initvalue";
+        Local_Ready = false;
+        Opponent_Ready = false;
         System.out.println("Server started\n");
         while(!Connected) {
                 try {
@@ -134,9 +137,28 @@ public class network_Server extends network_core {
             Connected = false;
             return;
         }
+        //READY
+        while(!Local_Ready) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            Writer.println("Ready");
+            Writer.flush();
+            while(!readymsg.equals("Ready")){
+                readymsg = Reader.readLine();
+            }
+            Opponent_Ready = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
 
+        //
         while( Running ){
             //Wait for local labyrinth to get updated
             while(!Locallabyrinth_updated){

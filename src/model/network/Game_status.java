@@ -7,7 +7,6 @@ public class Game_status implements java.io.Serializable{
     public volatile boolean Exited;
 
     public Game_status(){
-        Ready = false;
         Finished = false;
         Paused = false;
         Exited = false;

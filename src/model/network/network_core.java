@@ -15,7 +15,7 @@ public abstract class network_core implements Runnable{
     protected network_labyrinth Local_labyrinth;
     protected network_labyrinth Opponent_labyrinth;
     protected Boolean Running;
-    protected volatile Boolean Connected, Locallabyrinth_updated;
+    protected volatile Boolean Connected, Locallabyrinth_updated, Opponent_Ready, Local_Ready;
     protected LabyrinthType LabType;
     protected int Gamespeed;
     protected InputStreamReader inputstream;
@@ -35,6 +35,8 @@ public abstract class network_core implements Runnable{
     public network_core(){
         Running = false;
         Connected = false;
+        Opponent_Ready = false;
+        Local_Ready = false;
         Locallabyrinth_updated = false;
         Local_labyrinth = new network_labyrinth();
         Opponent_labyrinth = new network_labyrinth();
@@ -47,6 +49,14 @@ public abstract class network_core implements Runnable{
 
     public Labyrinth Get_Opponent_labyrinth(){
         return new Labyrinth(Opponent_labyrinth.Labyrinth_data);
+    }
+
+    public boolean getOpponentReady(){
+        return Opponent_Ready;
+    }
+
+    public void setLocalReady(){
+        Local_Ready = true;
     }
 
     public Game_status Get_Opponent_Status(){
