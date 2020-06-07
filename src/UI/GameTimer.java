@@ -330,9 +330,51 @@ public class GameTimer {
             gc1.setFill(Color.GREEN);
             gc1.fillOval(game.getLabyrinth().getBonus().getField().getKoord().getX() * blocksize, game.getLabyrinth().getBonus().getField().getKoord().getY() * blocksize, 10, 10);
         }
-        if(game.getLabyrinth().getBonus()!=null) {
+        if(labyrinthAnother.getBonus()!=null) {
             gc2.setFill(Color.GREEN);
             gc2.fillOval(labyrinthAnother.getBonus().getField().getKoord().getX() * blocksize, labyrinthAnother.getBonus().getField().getKoord().getY() * blocksize, 10, 10);
+        }
+        //fal kirajzolása
+        if(game.getLabyrinth().getWalls()!=null){
+            gc1.setFill(Color.BLACK);
+            for(int i=0;i<game.getLabyrinth().getWalls().size();i++){
+                gc1.fillRect(game.getLabyrinth().getWalls().get(i).getField().getKoord().getX()*blocksize, game.getLabyrinth().getWalls().get(i).getField().getKoord().getY()*blocksize, 10, 10);
+            }
+        }
+        if(labyrinthAnother.getWalls()!=null){
+            gc2.setFill(Color.BLACK);
+            for(int i=0;i<labyrinthAnother.getWalls().size();i++){
+                gc2.fillRect(labyrinthAnother.getWalls().get(i).getField().getKoord().getX()*blocksize, labyrinthAnother.getWalls().get(i).getField().getKoord().getY()*blocksize, 10, 10);
+            }
+        }
+        //score
+        if(game.getLabyrinth().getType()==LabyrinthType.WALLED) {
+            gc1.setFill(Color.WHITE);
+        }else{
+            gc1.setFill(Color.BLACK);
+        }
+        gc1.fillText("Score: "+ game.getLabyrinth().getSnake().getPoints(), 10 ,10);
+        if(game.getLabyrinth().getType()==LabyrinthType.WALLED) {
+            gc2.setFill(Color.WHITE);
+        }else{
+            gc2.setFill(Color.BLACK);
+        }
+        gc2.fillText("Score: "+ labyrinthAnother.getSnake().getPoints(), 10 ,10);
+
+        //kígyó kirajzolása
+        gc1.setFill(Color.GREEN);
+        //feje
+        gc1.fillRect(game.getLabyrinth().getSnake().getHead().getField().getKoord().getX()* blocksize,game.getLabyrinth().getSnake().getHead().getField().getKoord().getY()* blocksize, 10, 10);
+        //teste
+        for (int i = 0; i < game.getLabyrinth().getSnake().getBody().size(); i++) {
+            gc1.fillRect(game.getLabyrinth().getSnake().getBody().get(i).getField().getKoord().getX()*blocksize, game.getLabyrinth().getSnake().getBody().get(i).getField().getKoord().getY() * blocksize, 10, 10);
+        }
+        gc2.setFill(Color.GREEN);
+        //feje
+        gc2.fillRect(labyrinthAnother.getSnake().getHead().getField().getKoord().getX()* blocksize,labyrinthAnother.getSnake().getHead().getField().getKoord().getY()* blocksize, 10, 10);
+        //teste
+        for (int i = 0; i < game.getLabyrinth().getSnake().getBody().size(); i++) {
+            gc2.fillRect(labyrinthAnother.getSnake().getBody().get(i).getField().getKoord().getX()*blocksize, labyrinthAnother.getSnake().getBody().get(i).getField().getKoord().getY() * blocksize, 10, 10);
         }
     }
 
