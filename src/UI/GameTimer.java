@@ -34,6 +34,7 @@ import java.io.*;
 public class GameTimer {
     private static Game game;
     private static Labyrinth labyrinthAnother;
+    private static Game_status Game_statusAnother, Game_statusLocal;
     private static int blocksize=10;
     private static boolean pause=false;
     private static AnimationTimer gameTimer;
@@ -64,13 +65,10 @@ public class GameTimer {
     }
 
     public  void MultiGame(LabyrinthType lab, int speed, network_Server Test_Server, network_Client Test_Client, boolean isServer){
-        System.out.println("Test : 1");
+        Game_statusLocal= new Game_status();
         Labyrinth labyrinth = new Labyrinth(lab);
-        System.out.println("Test : 2");
         game = new Game(labyrinth, speed);
-        System.out.println("Test : 3");
         labyrinthAnother = new Labyrinth(lab);
-        System.out.println("Test : 4");
 
         HBox root = new HBox();
         Canvas c1 = new Canvas(90 * blocksize, 60 * blocksize);
@@ -129,8 +127,10 @@ public class GameTimer {
             if (key.getCode() == KeyCode.P) {
                 if(!pause){
                     pause=true;
+                    Game_statusLocal.Paused=true;
                 }else {
                     pause = false;
+                    Game_statusLocal.Paused=false;
                 }
             }
         });
@@ -138,12 +138,11 @@ public class GameTimer {
         //exit
         scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
             if (key.getCode() == KeyCode.ESCAPE) {
-                Game_status temp = new Game_status();
-                temp.Exited = true;
+                Game_statusLocal.Exited = true;
                 if(isServer) {
-                    Test_Server.UpdateLocallabyrinth(labyrinth, temp);
+                    Test_Server.UpdateLocallabyrinth(labyrinth, Game_statusLocal);
                 }else{
-                    Test_Client.UpdateLocallabyrinth(labyrinth,temp);
+                    Test_Client.UpdateLocallabyrinth(labyrinth,Game_statusLocal);
                 }
                 gameStage.close();
                 gameTimer.stop();
@@ -299,8 +298,12 @@ public class GameTimer {
         //Network
         if(isServer) {
             labyrinthAnother = Test_Server.Get_Opponent_labyrinth();
+            Game_statusAnother=Test_Server.Get_Opponent_Status();
+            Test_Server.UpdateLocallabyrinth(game.getLabyrinth(),Game_statusLocal);
         }else{
             labyrinthAnother = Test_Client.Get_Opponent_labyrinth();
+            Game_statusAnother=Test_Client.Get_Opponent_Status();
+            Test_Client.UpdateLocallabyrinth(game.getLabyrinth(),Game_statusLocal);
         }
 
         //megjelenítés
