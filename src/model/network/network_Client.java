@@ -194,11 +194,13 @@ public class network_Client extends network_core {
         // PROGRAM RUNNING
         while( Running ){
             try {
-
-                if((inputstream.ready() && !Opponentlabyrinth_updated && !OpponentStatus_updated)) {
+                if((inputstream.ready() && !Opponentlabyrinth_updated && !OpponentStatus_updated) ) {
                     //System.out.println(" " + Reader.ready() + "\n");
 
                     Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
+                    if(Opponent_labyrinth.Status.Exited){
+                        Local_labyrinth.Status.Exited = true;
+                    }
                     Obj_outputstream.writeObject(Local_labyrinth);
 
                     Opponentlabyrinth_updated = true;
@@ -210,15 +212,16 @@ public class network_Client extends network_core {
                             " and " + Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY());
                     //System.out.printf("Labyrinth updated!\n");
                 }
+                if ( Local_labyrinth.Status.Exited && Opponent_labyrinth.Status.Exited){
+                    Running = false;
+                    System.out.println("Network thread closed.");
+                }
             } catch (Exception e) {
                 Running = false;
                 Connected = false;
                 e.printStackTrace();
             }
 
-            if(Opponent_labyrinth.Status.Exited && Local_labyrinth.Status.Exited){
-                Running = false;
-            }
         }
 
         Running = false;

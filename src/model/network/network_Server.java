@@ -175,6 +175,11 @@ public class network_Server extends network_core {
                                             "      " + Local_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY() + " || " +
                                     Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getX() +
                                     "      " + Opponent_labyrinth.Labyrinth_data.getSnakeMemento().getHead().getY());
+                if(Opponent_labyrinth.Status.Exited){
+                    Local_labyrinth.Status.Exited = true;
+                    Obj_outputstream.writeObject(Local_labyrinth);
+                    Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
+                }
                 Locallabyrinth_updated = false;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -185,6 +190,7 @@ public class network_Server extends network_core {
             //if both guys exits game is over
             if(Opponent_labyrinth.Status.Exited && Local_labyrinth.Status.Exited){
                 Running = false;
+                System.out.println("Network thread closed.");
             }
         }
 
