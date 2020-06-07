@@ -57,6 +57,7 @@ public class network_Server extends network_core {
 
     public void run(){
         Running = true;
+        String msg;
         System.out.println("Server started\n");
         while(!Connected) {
                 try {
@@ -81,7 +82,7 @@ public class network_Server extends network_core {
                     Reader = new BufferedReader(inputstream);
 
                     System.out.println("Verifying Client...\n");
-                    Writer.println("Henlo\n");
+                    Writer.println("Henlo");
                     Writer.flush();
                     String str = Reader.readLine();
                     if (str.equals("Henlo")) {
@@ -107,10 +108,25 @@ public class network_Server extends network_core {
 
         try {
             //sending game data to client
-            Writer.println(LabType);
-            Writer.println(Gamespeed);
+            int temp_type;
+            switch(LabType){
+                case WALLESS:
+                    temp_type = 0;
+                    break;
+                case WALLED:
+                    temp_type = 1;
+                    break;
+                case EXTRA:
+                    temp_type = 2;
+                    break;
+                default:
+                    temp_type = 0;
+            }
+            msg = temp_type + "@" + Gamespeed;
+            System.out.println(msg);
+            Writer.println(msg);
+            Writer.flush();
             Params_updated = false;
-
             System.out.println("Labyrinth data provided for settings!");
         } catch (Exception e) {
             e.printStackTrace();

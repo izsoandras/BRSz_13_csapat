@@ -40,7 +40,7 @@ public class Server_TEST {
             }
         }
         //System.out.printf("Pushing labyrinth for data...\n");
-        Test_Server.UpdateLocallabyrinth(server_lab, server_status);
+        Test_Server.UpdateServerParameters(LabyrinthType.EXTRA, 10);
 
 
         //___________________________________________________________________________________________________________________
