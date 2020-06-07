@@ -24,7 +24,7 @@ public class main_ui extends Application {
     private int speed=5;
     private LabyrinthType lab = LabyrinthType.WALLESS;
     private String IP="192.168.0.27";
-    private TopList topList = new TopList();
+
 
     static int block_size = 10; //10pixel egy blokk mérete
     GameTimer gt= new GameTimer();
@@ -39,7 +39,7 @@ public class main_ui extends Application {
 
         constructMenu();
         constructSettings();
-       // constructToplist();
+        constructToplist();
         constructMulti1();
         constructMultiWaitGuest();
         constructMultiIP();
@@ -139,7 +139,7 @@ public class main_ui extends Application {
         Label lb2 = new Label("Toplista:");
         lb2.setFont(new Font("", 15));
         vb.getChildren().add(lb2);
-
+        TopList topList = new TopList();
         for(Entry e : topList.getEntries()){
             Label lb1 = new Label(e.getName()+": "+e.getPoints());
             lb1.setFont(new Font("", 15));
