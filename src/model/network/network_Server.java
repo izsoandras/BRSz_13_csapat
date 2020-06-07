@@ -126,7 +126,7 @@ public class network_Server extends network_core {
                     temp_type = 0;
             }
             msg = temp_type + "@" + Gamespeed;
-            System.out.println(msg);
+            //System.out.println(msg);
             Writer.println(msg);
             Writer.flush();
             Params_updated = false;
@@ -148,9 +148,11 @@ public class network_Server extends network_core {
         try {
             Writer.println("Ready");
             Writer.flush();
+            System.out.println("Local Ready!");
             while(!readymsg.equals("Ready")){
                 readymsg = Reader.readLine();
             }
+            System.out.println("Opponent Ready!");
             Opponent_Ready = true;
         } catch (IOException e) {
             e.printStackTrace();

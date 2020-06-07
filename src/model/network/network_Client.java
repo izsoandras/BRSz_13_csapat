@@ -139,7 +139,7 @@ public class network_Client extends network_core {
             }
             if(Reader.ready()) {
                 String msg = Reader.readLine();
-                System.out.println("Received: " + msg);
+                //System.out.println("Received: " + msg);
                 String[] messageparts = msg.split("@");
                 switch (messageparts[0]) {
                     case "1":
@@ -175,6 +175,7 @@ public class network_Client extends network_core {
             while(!readymsg.equals("Ready")){
                 readymsg = Reader.readLine();
             }
+            System.out.println("Opponent Ready!");
             Opponent_Ready = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -186,6 +187,7 @@ public class network_Client extends network_core {
                 e.printStackTrace();
             }
         }
+        System.out.println("Local Ready!");
         Writer.println("Ready");
         Writer.flush();
 
