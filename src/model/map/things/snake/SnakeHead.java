@@ -27,7 +27,9 @@ public class SnakeHead extends SnakePart {
     public void step(){
         getField().removeThing();
 
-        getField().getNeighbor(dir).accept(this);
+        if(!getField().getNeighbor(dir).accept(this)){
+            getField().accept(this);
+        }
         this.lastDir = this.dir;
     }
 

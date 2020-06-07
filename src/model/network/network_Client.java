@@ -197,7 +197,11 @@ public class network_Client extends network_core {
                 if((inputstream.ready() && !Opponentlabyrinth_updated && !OpponentStatus_updated) ) {
                     //System.out.println(" " + Reader.ready() + "\n");
 
-                    Opponent_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
+                    Temp_labyrinth = (network_labyrinth) Obj_inputstream.readObject();
+                    Opponent_labyrinth.Status = Temp_labyrinth.Status;
+                    if(!Temp_labyrinth.Status.Finished){
+                        Opponent_labyrinth.Labyrinth_data = Temp_labyrinth.Labyrinth_data;
+                    }
                     if (Opponent_labyrinth.Status.Exited) {
                         Local_labyrinth.Status.Exited = true;
                     }

@@ -12,7 +12,7 @@ public abstract class network_core implements Runnable{
 
     protected Updatesignal Signal_lab_Update, Signal_parameters_init;
     protected Socket GameSocket;
-    protected volatile network_labyrinth Local_labyrinth, Opponent_labyrinth;
+    protected volatile network_labyrinth Local_labyrinth, Opponent_labyrinth, Temp_labyrinth;
     protected Boolean Running;
     protected volatile Boolean Connected, Locallabyrinth_updated, Opponent_Ready, Local_Ready;
     protected LabyrinthType LabType;
@@ -39,6 +39,7 @@ public abstract class network_core implements Runnable{
         Locallabyrinth_updated = false;
         Local_labyrinth = new network_labyrinth();
         Opponent_labyrinth = new network_labyrinth();
+        Temp_labyrinth = new network_labyrinth();
         Signal_lab_Update = new Updatesignal();
         Signal_parameters_init = new Updatesignal();
         //System.out.printf("Parent constructor run\n");
