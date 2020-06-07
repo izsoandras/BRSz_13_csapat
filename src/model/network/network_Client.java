@@ -100,7 +100,7 @@ public class network_Client extends network_core {
             Running = false;
             Connected = false;
             Server_invalid = true;
-            e.printStackTrace();
+            //e.printStackTrace();
             return;
         }
 
