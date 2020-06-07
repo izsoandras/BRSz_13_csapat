@@ -1,8 +1,6 @@
 package UI;
 
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,16 +11,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import model.Game;
-import model.GameMemento;
-import model.map.Labyrinth;
 import model.util.LabyrinthType;
-import UI.GameTimer;
+
 
 import static model.GameParams.LABYRINTH_HEIGHT;
 import static model.GameParams.LABYRINTH_WIDTH;
@@ -34,8 +27,6 @@ public class main_ui extends Application {
     private LabyrinthType lab = LabyrinthType.WALLESS;
 
     static int block_size = 10; //10pixel egy blokk mérete
-    int width=LABYRINTH_WIDTH;       //blokkok száma
-    int height=LABYRINTH_HEIGHT;
     GameTimer gt= new GameTimer();
 
     @Override
@@ -45,7 +36,6 @@ public class main_ui extends Application {
         constructMenu();
         constructSettings();
         constructToplist();
-        //constructGame();
         constructMulti1();
         constructMultiIP();
         constructMultiWait();
@@ -95,22 +85,6 @@ public class main_ui extends Application {
         root.setBackground(background);
     }
 
-    //private void constructGame(){
-
-
-            /*GameMemento m = game.getMemento();
-            m.serialize();*/
-           /* mainWindow.setScene(Menu);
-
-        Canvas c = new Canvas(LABYRINTH_WIDTH*block_size, LABYRINTH_HEIGHT*block_size);
-        GraphicsContext gc = c.getGraphicsContext2D();
-
-        BorderPane root = new BorderPane();
-        root.setTop(btnBack);
-        root.setBottom(c);
-        Game = new Scene(root, 900,650);
-
-    }*/
     private void constructSettings(){
         Label lb = new Label("Beállítások");
 
